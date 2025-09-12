@@ -19,7 +19,7 @@ const Login = () => {
             <Input placeholder="IDNP" />
             <Input placeholder="Password" />
 
-            <div className="w-full">
+            <div className="w-full mt-2">
               <Button className="w-full flex flex-col gap-1">Login</Button>
               <div className="w-full flex justify-between">
                 <Link to="#">
