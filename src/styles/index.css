@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Cossette+Titre:wght@400;700&display=swap');
+
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -117,4 +119,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-family: 'Cossette Titre', sans-serif;
 }
