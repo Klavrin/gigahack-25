@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import LandingPage from './pages/LandingPage'
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/landing-page" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   )
