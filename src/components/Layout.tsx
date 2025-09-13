@@ -1,4 +1,5 @@
 import { AppSidebar } from './AppSidebar'
+import MobileHeader from './MobileHeader'
 import MobileNav from './MobileNav'
 import { ThemeTogglerButton } from './animate-ui/components/buttons/theme-toggler'
 import { SidebarProvider, SidebarTrigger } from './ui/sidebar'
@@ -13,6 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <SidebarTrigger size="lg" className="active:scale-95 cursor-pointer" />
             <ThemeTogglerButton className="active:scale-95 transition-all" />
           </div>
+          <MobileHeader />
           <div className="h-screen w-full font-['Nunito'] px-4 overflow-y-scroll">
             {children}
           </div>
