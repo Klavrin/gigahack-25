@@ -28,7 +28,7 @@ const LandingPage = () => {
 
         <div className="relative flex flex-col justify-between p-6 z-10 text-white h-screen">
           <div className="flex justify-between items-center">
-            <div className="w-1/3" />
+            <div className="w-1/3 hidden lg:block" />
 
             <div className="flex h-6">
               <FlipText className="cursor-pointer uppercase">Beliefs</FlipText>,
@@ -45,7 +45,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between text-lg">
+          <div className="md:flex hidden justify-between text-lg">
             <span>Subsidies</span>
             <span>EU Compliance</span>
             <span>Property & Livestock sharing</span>
@@ -53,11 +53,11 @@ const LandingPage = () => {
           </div>
 
           <div className="relative text-white flex justify-between items-end">
-            <h1 className="text-[2.2vw] tracking-tight text-balance w-[35vw] font-sans leading-[2.5vw]">
+            <h1 className="md:text-[2.2vw] text-5xl tracking-tight text-balance md:w-[35vw] w-[65rem] font-sans lg:leading-[2.5vw] leading-[4rem]">
               FarmXpert combines solid data with rewarding work experience, bringing
               together the farmers and the development of Moldovan technology.
             </h1>
-            <p className="uppercase text-white">(Scroll Down)</p>
+            <p className="uppercase text-white hidden md:block">(Scroll Down)</p>
           </div>
         </div>
       </section>
@@ -71,8 +71,8 @@ const LandingPage = () => {
           </h1>
 
           <div className="flex">
-            <div className="w-1/3" />
-            <div className="w-[28%] text-xl">
+            <div className="w-1/3 hidden md:block" />
+            <div className="md:w-[28%] w-full text-xl px-4 md:px-0">
               <img src="/src/assets/sheep.jpg" alt="sheep" className="mb-6" />
               We work closely with farmers, making sure they are heard and their needs are
               met. We also work closely with the government, assuring met quotas and
@@ -94,8 +94,8 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="relative px-8 flex pt-[15rem] z-20">
-          <div className="w-1/4">
+        <section className="relative px-8 flex md:flex-row flex-col pt-[15rem] z-20">
+          <div className="lg:w-1/4 w-full">
             <img src="src/assets/tractor.jpg" alt="solution" />
 
             <div className="flex flex-col text-xl mt-8">
@@ -132,7 +132,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="w-[50rem] ml-[12rem] text-6xl font-sans font-semibold indent-32 flex flex-col">
+          <div className="lg:w-[50vw] w-full md:ml-[12rem] ml-0 md:mt-0 mt-12 text-[3.5vw] leading-[3.5vw] font-sans font-semibold indent-32 flex flex-col">
             Our approach is designed to ease the work of every farmer in Moldova,
             regardless of the size of their business, by implementing an AI assistant to
             help with the beaurocratic processes.
@@ -154,8 +154,8 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="w-full -z-10 bg-white h-[70vw]">
-          <div className="invert relative bottom-[25vw]">
+        <section className="w-full -z-10 bg-white lg:h-[70vw]">
+          <div className="invert relative bottom-[25vw] lg:block hidden">
             <CurvedLoop
               marqueeText="Focused ✦ On ✦ Making ✦ Your ✦ Life ✦ Easier ✦ "
               speed={1}
@@ -166,16 +166,16 @@ const LandingPage = () => {
             />
           </div>
 
-          <div className="flex relative bottom-[34vw] border-t pt-[5vw]">
-            <div className="w-1/3 px-12">
+          <div className="flex relative lg:bottom-[34vw] border-t pt-[5vw] lg:mt-0 mt-5 bg-white">
+            <div className="w-1/3 px-12 lg:block hidden">
               <img src="/src/assets/hands.jpg" alt="hands" />
             </div>
 
-            <div className="w-1/3">
+            <div className="lg:w-1/3 w-full lg:px-0 px-4">
               <div>
-                <p className="uppercase">(navigation)</p>
+                <p className="uppercase lg:text-lg text-sm">(navigation)</p>
 
-                <div className="flex flex-col text-[3vw] gap-2 font-sans font-semibold mt-6 tracking-[-0.05vw] leading-[3vw] ">
+                <div className="flex flex-col md:text-[3vw] text-[1.5rem] gap-2 font-sans font-semibold mt-6 tracking-[-0.05vw] lg:leading-[3vw] leading-[1.5rem]">
                   <FlipText className="cursor-pointer uppercase">Beliefs</FlipText>
                   <FlipText className="cursor-pointer uppercase">Solution</FlipText>
                   <FlipText className="cursor-pointer uppercase">Get Started</FlipText>
@@ -187,7 +187,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="relative bottom-[36.5vw] px-8 font-sans font-semibold tracking-tight flex uppercase">
+          <div className="relative lg:bottom-[36.5vw] px-8 font-sans font-semibold tracking-tight lg:flex hidden uppercase ">
             <div className="w-1/3" />
 
             <div className="w-1/3">
@@ -207,8 +207,6 @@ const LandingPage = () => {
 
               <p className="text-[0.875vw] cursor-pointer">Careless Whispers</p>
             </div>
-
-            <p className="text-sm cursor-pointer">Careless Whispers</p>
           </div>
         </section>
       </div>
