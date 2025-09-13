@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Home, Settings, History, Map, Plus, BookTemplate, User } from 'lucide-react'
 import {
   Sidebar,
@@ -21,17 +21,17 @@ const contentItems = [
   },
   {
     title: 'Map',
-    url: '#',
+    url: '/map',
     icon: Map
   },
   {
     title: 'Subsidy',
-    url: '#',
+    url: '/subsidy',
     icon: BookTemplate
   },
   {
     title: 'Profile',
-    url: '#',
+    url: '/profile',
     icon: User
   }
 ]
@@ -39,12 +39,12 @@ const contentItems = [
 const footerItems = [
   {
     title: 'History',
-    url: '#',
+    url: '/history',
     icon: History
   },
   {
     title: 'Settings',
-    url: '#',
+    url: '/settings',
     icon: Settings
   }
 ]
@@ -66,8 +66,8 @@ export function AppSidebar() {
                   asChild
                   className="active:scale-95 transition-all cursor-pointer"
                 >
-                  <Button className="bg-blue-700">
-                    <Plus />
+                  <Button className="bg-blue-500 h-10 hover:bg-blue-700 active:bg-blue-600 hover:text-white dark:hover:text-black active:text-white dark:active:text-black text-lg">
+                    <Plus className="min-w-5 min-h-5" />
                     <span>Add</span>
                   </Button>
                 </SidebarMenuButton>
@@ -79,14 +79,14 @@ export function AppSidebar() {
                     asChild
                     className={`active:scale-95 transition-all ${
                       location.pathname === item.url
-                        ? 'bg-neutral-300 dark:bg-neutral-700'
+                        ? 'bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-700'
                         : ''
                     }`}
                   >
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

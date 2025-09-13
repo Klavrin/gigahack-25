@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import LandingPage from './pages/LandingPage'
 import Lenis from 'lenis'
+import Subsidy from './pages/Subsidy'
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -34,7 +35,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/Home" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/subsidy" element={<Subsidy />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/landing-page" element={<LandingPage />} />

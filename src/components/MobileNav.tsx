@@ -1,44 +1,50 @@
 import { BookTemplate, Home, User, Map, Plus } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 
 const contentItems = [
   {
     title: 'Home',
-    url: '#',
+    url: '/home',
     icon: Home
   },
   {
     title: 'Map',
-    url: '#',
+    url: '/map',
     icon: Map
   },
   {
     title: 'Add',
-    url: '#',
+    url: '',
     icon: Plus
   },
   {
     title: 'Subsidy',
-    url: '#',
+    url: '/subsidy',
     icon: BookTemplate
   },
   {
     title: 'Profile',
-    url: '#',
+    url: '/profile',
     icon: User
   }
 ]
 
 const MobileNav = () => {
+  const location = useLocation()
+
   return (
     <div className="md:hidden block w-screen fixed bottom-0 font-['Nunito'] py-2 border-t bg-neutral-100 dark:bg-neutral-900">
       <div className="flex w-full justify-between px-2 cursor-pointer">
         {contentItems.map((item) => (
           <div
             className={`flex flex-col items-center justify-center rounded-full min-w-18 min-h-18 ${
-              item.title === 'Add' ? 'bg-blue-700 text-white' : ''
+              item.title === 'Add' ? 'bg-blue-500 text-white' : ''
             }`}
           >
-            <item.icon className={`${item.title === 'Add' ? 'size-8' : ''}`} />
+            <item.icon
+              fill={location.pathname === item.url ? 'color' : 'none'}
+              className={`${item.title === 'Add' ? 'size-8' : ''}`}
+            />
             <span className={`${item.title === 'Add' ? 'hidden' : 'block'}`}>
               {item.title}
             </span>
