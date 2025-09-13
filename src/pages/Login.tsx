@@ -1,9 +1,30 @@
+import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Dither from '@/components/Dither'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+  const [phone, setPhone] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+
+  const handleLogin = async () => {
+    const req = {
+      phone,
+      password
+    }
+
+    const res = await axios.post(import.meta.env.VITE_BACKEND_URL + '/auth/login', req)
+    console.log('Login response:', res)
+    if (res.status === 201) {
+      localStorage.setItem('accessToken', res.data['access_token'])
+      navigate('/home')
+    }
+  }
+
   return (
     <div>
       <div className="flex min-h-screen font-sans">
@@ -16,11 +37,16 @@ const Login = () => {
           </div>
 
           <div className="w-[80%] flex flex-col gap-2">
-            <Input placeholder="IDNP" />
-            <Input placeholder="Password" />
+            <Input
+              placeholder="Phone Number"
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <Input placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
 
             <div className="w-full mt-2">
-              <Button className="w-full flex flex-col gap-1">Login</Button>
+              <Button className="w-full flex flex-col gap-1" onClick={handleLogin}>
+                Login
+              </Button>
               <div className="w-full flex justify-between">
                 <Link to="#">
                   <small className="text-sm leading-none font-medium opacity-50">
