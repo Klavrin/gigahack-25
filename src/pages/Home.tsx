@@ -1,14 +1,8 @@
+import Layout from '@/components/Layouts'
 import { Button } from '@/components/ui/button'
-import Sidebar from '@/components/Sidebar'
 
 const Home = () => {
-  return (
-    <div className="font-sans">
-      <Sidebar>
-        <Button>Open</Button>
-      </Sidebar>
-    </div>
-  )
+  return <Layout></Layout>
 }
 
 export default Home
