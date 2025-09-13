@@ -11,9 +11,11 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import axios from 'axios'
+import { LoaderCircle } from 'lucide-react'
 
 const Profile = () => {
   const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -32,10 +34,20 @@ const Profile = () => {
         }
       )
       setUser(userData.data)
-      console.log(userData.data)
+      setLoading(false)
     }
     fetchUser()
   }, [])
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <LoaderCircle className="animate-spin" />
+        </div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout>
