@@ -31,7 +31,7 @@ const contentItems = [
 const MobileNav = () => {
   return (
     <div className="md:hidden block w-screen fixed bottom-0 font-['Nunito'] py-2 border-t bg-neutral-100 dark:bg-neutral-900">
-      <div className="flex w-full justify-between px-6 cursor-pointer">
+      <div className="flex w-full justify-between px-2 cursor-pointer">
         {contentItems.map((item) => (
           <div
             className={`flex flex-col items-center justify-center rounded-full min-w-18 min-h-18 ${

@@ -1,14 +1,5 @@
-import {
-  Home,
-  Settings,
-  History,
-  Map,
-  Plus,
-  BookTemplate,
-  Book,
-  User
-} from 'lucide-react'
-
+import { useLocation } from 'react-router-dom'
+import { Home, Settings, History, Map, Plus, BookTemplate, User } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -25,7 +16,7 @@ import { Button } from './ui/button'
 const contentItems = [
   {
     title: 'Home',
-    url: '#',
+    url: '/home',
     icon: Home
   },
   {
@@ -59,6 +50,8 @@ const footerItems = [
 ]
 
 export function AppSidebar() {
+  const location = useLocation()
+
   return (
     <Sidebar className="md:block hidden">
       <SidebarContent>
@@ -82,7 +75,14 @@ export function AppSidebar() {
 
               {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="active:scale-95 transition-all">
+                  <SidebarMenuButton
+                    asChild
+                    className={`active:scale-95 transition-all ${
+                      location.pathname === item.url
+                        ? 'bg-neutral-300 dark:bg-neutral-700'
+                        : ''
+                    }`}
+                  >
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -94,6 +94,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter className="font-sans">
         {footerItems.map((item) => (
           <SidebarMenuItem key={item.title}>
