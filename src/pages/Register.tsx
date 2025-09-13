@@ -1,15 +1,42 @@
+import { useState } from 'react'
+import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import Dither from '@/components/Dither'
 import { Link } from 'react-router-dom'
 
 const Register = () => {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [idnp, setIdnp] = useState('')
+  const [idno, setIdno] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleRegister = async () => {
+    const req = {
+      userId: idnp,
+      businessId: idno,
+      firstName,
+      lastName,
+      email,
+      phone,
+      isOwner: true,
+      password
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/register`,
+        req
+      )
+      console.log('Registration successful:', res.data)
+    } catch (error) {
+      console.error('Registration failed:', error)
+    }
+  }
+
   return (
     <div>
       <div className="flex min-h-screen font-sans">
@@ -27,16 +54,45 @@ const Register = () => {
 
           <div className="w-[80%] flex flex-col gap-2">
             <div className="flex gap-2">
-              <Input placeholder="First Name" />
-              <Input placeholder="Last Name" />
+              <Input
+                placeholder="First Name"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <Input
+                placeholder="Last Name"
+                onChange={(e) => setLastName(e.target.value)}
+              />
             </div>
-            <Input placeholder="IDNP" type="number" />
-            <Input placeholder="IDNO" type="number" />
-            <Input placeholder="Phone number" type="number" />
-            <Input placeholder="Email" type="email" />
+            <Input
+              placeholder="IDNP"
+              type="number"
+              onChange={(e) => setIdnp(e.target.value)}
+            />
+            <Input
+              placeholder="IDNO"
+              type="number"
+              onChange={(e) => setIdno(e.target.value)}
+            />
+            <Input
+              placeholder="Phone number"
+              type="number"
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <Input
+              placeholder="Email"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              placeholder="Password"
+              type="passworde"
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
             <div className="w-full mt-2">
-              <Button className="w-full">Register</Button>
+              <Button className="w-full" onClick={handleRegister}>
+                Register
+              </Button>
               <div className="w-full flex justify-between">
                 <Link to="#">
                   <small className="text-sm leading-none font-medium opacity-50">
