@@ -1,4 +1,5 @@
 import { AppSidebar } from './AppSidebar'
+import { ThemeTogglerButton } from './animate-ui/components/buttons/theme-toggler'
 import { SidebarProvider, SidebarTrigger } from './ui/sidebar'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -6,10 +7,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <main className="w-full">
-        <div className="bg-red-500 px-3 py-2 w-full">
-          <SidebarTrigger />
+        <div className="px-4 py-2 w-full flex items-center justify-between">
+          <SidebarTrigger size="lg" className="active:scale-95 cursor-pointer" />
+          <ThemeTogglerButton className="active:scale-95 transition-all" />
         </div>
-        <div className="bg-blue-500 min-h-screen w-full">{children}</div>
+        <div className="min-h-screen w-full font-sans px-4">{children}</div>
       </main>
     </SidebarProvider>
   )
