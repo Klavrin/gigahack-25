@@ -1,5 +1,5 @@
-import { BookTemplate, Home, User, Map, Plus } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
+import { Home, User, Map, Plus, FilePen } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 
 const contentItems = [
   {
@@ -20,7 +20,7 @@ const contentItems = [
   {
     title: 'Subsidy',
     url: '/subsidy',
-    icon: BookTemplate
+    icon: FilePen
   },
   {
     title: 'Profile',
@@ -36,7 +36,8 @@ const MobileNav = () => {
     <div className="md:hidden block w-screen fixed bottom-0 font-['Nunito'] py-2 border-t bg-neutral-100 dark:bg-neutral-900">
       <div className="flex w-full justify-between px-2 cursor-pointer">
         {contentItems.map((item) => (
-          <div
+          <Link
+            to={item.url}
             className={`flex flex-col items-center justify-center rounded-full min-w-18 min-h-18 ${
               item.title === 'Add' ? 'bg-blue-500 text-white' : ''
             }`}
@@ -48,7 +49,7 @@ const MobileNav = () => {
             <span className={`${item.title === 'Add' ? 'hidden' : 'block'}`}>
               {item.title}
             </span>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

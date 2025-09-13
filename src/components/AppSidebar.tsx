@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, Settings, History, Map, Plus, BookTemplate, User } from 'lucide-react'
+import { Home, Settings, History, Map, Plus, User, FilePen } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -27,7 +27,7 @@ const contentItems = [
   {
     title: 'Subsidy',
     url: '/subsidy',
-    icon: BookTemplate
+    icon: FilePen
   },
   {
     title: 'Profile',
