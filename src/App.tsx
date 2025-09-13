@@ -27,7 +27,6 @@ const App = () => {
     requestAnimationFrame(raf)
 
     return () => {
-      // cleanup on unmount
       lenis.destroy()
     }
   }, [])
