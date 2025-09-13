@@ -53,39 +53,46 @@ export function AppSidebar() {
   const location = useLocation()
 
   return (
-    <Sidebar className="md:block hidden">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="font-sans text-xl mb-2">
-            FarmXpert
+    <Sidebar className="md:block hidden border-r border-gray-200 dark:border-gray-800 font-['Nunito']">
+      <SidebarContent className="bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950">
+        <SidebarGroup className="px-4 py-6">
+          <SidebarGroupLabel className="font-bold text-2xl mb-8 text-green-700 dark:text-green-400 tracking-tight">
+            🌾 FarmXpert
           </SidebarGroupLabel>
-          <SidebarGroupContent className="font-sans">
+
+          <SidebarGroupContent className="space-y-2">
             <SidebarMenu>
-              <SidebarMenuItem key="add" className="mb-2">
+              <SidebarMenuItem className="mb-6">
                 <SidebarMenuButton
                   asChild
-                  className="active:scale-95 transition-all cursor-pointer"
+                  className="hover:scale-[1.02] transition-all duration-200 shadow-sm"
                 >
-                  <Button className="bg-blue-500 h-10 hover:bg-blue-700 active:bg-blue-600 hover:text-white dark:hover:text-black active:text-white dark:active:text-black text-lg">
-                    <Plus className="min-w-5 min-h-5" />
-                    <span>Add</span>
+                  <Button className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 active:scale-[0.98] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border-0">
+                    <Plus className="w-5 h-5 mr-2" />
+                    <span className="text-base">Add New</span>
                   </Button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               {contentItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} className="mb-1">
                   <SidebarMenuButton
                     asChild
-                    className={`active:scale-95 transition-all ${
+                    className={`h-11 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                       location.pathname === item.url
-                        ? 'bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-700'
-                        : ''
+                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 shadow-sm border border-green-200 dark:border-green-800'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-700 dark:text-gray-300'
                     }`}
                   >
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    <Link to={item.url} className="flex items-center px-3 py-2">
+                      <item.icon
+                        className={`w-5 h-5 mr-3 ${
+                          location.pathname === item.url
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-gray-500 dark:text-gray-400'
+                        }`}
+                      />
+                      <span className="font-medium text-sm">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -95,20 +102,26 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="font-sans">
-        {footerItems.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton
-              asChild
-              className="active:scale-95 transition-all hover:bg-neutral-200"
-            >
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.title}</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+      <SidebarFooter className="border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 p-4">
+        <SidebarMenu className="space-y-1">
+          {footerItems.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton
+                asChild
+                className={`h-10 rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+                  location.pathname === item.url
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                    : 'hover:bg-gray-200/70 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                <Link to={item.url} className="flex items-center px-3 py-2">
+                  <item.icon className="w-4 h-4 mr-3" />
+                  <span className="font-medium text-sm">{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   )
