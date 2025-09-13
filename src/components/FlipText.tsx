@@ -4,9 +4,10 @@ import type React from 'react'
 interface FlipTextProps {
   children: React.ReactNode
   className?: string
+  childDivClassName?: string
 }
 
-const FlipText = ({ children, className }: FlipTextProps) => {
+const FlipText = ({ children, className, childDivClassName }: FlipTextProps) => {
   return (
     <motion.div
       initial="initial"
@@ -23,7 +24,7 @@ const FlipText = ({ children, className }: FlipTextProps) => {
         {children}
       </motion.div>
       <motion.div
-        className="absolute top-full left-0"
+        className={'absolute top-full left-0 ' + childDivClassName}
         variants={{
           initial: { y: 0 },
           hovered: { y: '-100%' }
