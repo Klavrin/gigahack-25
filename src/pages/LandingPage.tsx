@@ -1,10 +1,13 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import CurvedLoop from '@/components/CurvedLoop'
 import FlipText from '@/components/FlipText'
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const LandingPage = () => {
   const [time, setTime] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const updateTime = () => {
@@ -37,12 +40,12 @@ const LandingPage = () => {
               <FlipText className="cursor-pointer uppercase ml-2">Contact Us</FlipText>
             </div>
 
-            <div className="flex cursor-pointe group cursor-pointer">
+            <Link to="/register" className="flex cursor-pointe group cursor-pointer">
               <FlipText className="w-full bg-black text-3xl">Get Started</FlipText>
               <div className="min-w-8 min-h-4 flex justify-center items-center bg-black">
                 <div className="rounded-full min-w-2 min-h-2 group-hover:min-w-3 group-hover:min-h-3 group-hover:bg-black border-2 border-white bg-white transition-all" />
               </div>
-            </div>
+            </Link>
           </div>
 
           <div className="md:flex hidden justify-between text-lg">
@@ -145,6 +148,7 @@ const LandingPage = () => {
               <Button
                 className="mt-12 cursor-pointer text-lg px-0 overflow-hidden"
                 size="lg"
+                onClick={() => navigate('/register')}
               >
                 <FlipText childDivClassName="py-6 px-8" className="py-6 px-8">
                   Get Started Now
@@ -180,8 +184,12 @@ const LandingPage = () => {
                   <FlipText className="cursor-pointer uppercase">Solution</FlipText>
                   <FlipText className="cursor-pointer uppercase">Get Started</FlipText>
                   <FlipText className="cursor-pointer uppercase">Contact Us</FlipText>
-                  <FlipText className="cursor-pointer uppercase">Login</FlipText>
-                  <FlipText className="cursor-pointer uppercase">Register</FlipText>
+                  <Link to="/login">
+                    <FlipText className="cursor-pointer uppercase">Login</FlipText>
+                  </Link>
+                  <Link to="/register">
+                    <FlipText className="cursor-pointer uppercase">Register</FlipText>
+                  </Link>
                 </div>
               </div>
             </div>
