@@ -103,31 +103,31 @@ const LandingPage = () => {
                 <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (1)
                 </span>{' '}
-                Solution 1
+                AI Document Completions
               </div>
               <div className="border-b border-neutral-300 py-1">
                 <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (2)
                 </span>{' '}
-                Solution 2
+                Subsidy Informational Support
               </div>
               <div className="border-b border-neutral-300 py-1">
                 <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (3)
                 </span>{' '}
-                Solution 3
+                Intuitive UI
               </div>
               <div className="border-b border-neutral-300 py-1">
                 <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (4)
                 </span>{' '}
-                Solution 4
+                Security
               </div>
               <div className="border-b border-neutral-300 py-1">
                 <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (5)
                 </span>{' '}
-                Solution 5
+                Data Tracking
               </div>
             </div>
           </div>
@@ -154,7 +154,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="w-full bg-white -z-10">
+        <section className="w-full -z-10 bg-white h-[70vw]">
           <div className="invert relative bottom-[25vw]">
             <CurvedLoop
               marqueeText="Focused ✦ On ✦ Making ✦ Your ✦ Life ✦ Easier ✦ "
@@ -166,14 +166,16 @@ const LandingPage = () => {
             />
           </div>
 
-          <div className="flex relative bottom-[30vw]">
-            <div className="w-1/3" />
+          <div className="flex relative bottom-[34vw] border-t pt-[5vw]">
+            <div className="w-1/3 px-12">
+              <img src="/src/assets/hands.jpg" alt="hands" />
+            </div>
 
             <div className="w-1/3">
               <div>
                 <p className="uppercase">(navigation)</p>
 
-                <div className="flex flex-col text-5xl gap-2 font-sans font-semibold mt-6 tracking-tighter">
+                <div className="flex flex-col text-[3vw] gap-2 font-sans font-semibold mt-6 tracking-[-0.05vw] leading-[3vw] ">
                   <FlipText className="cursor-pointer uppercase">Beliefs</FlipText>
                   <FlipText className="cursor-pointer uppercase">Solution</FlipText>
                   <FlipText className="cursor-pointer uppercase">Get Started</FlipText>
@@ -185,11 +187,28 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="relative bottom-[25vw] px-8 font-sans font-semibold tracking-tight">
-            <div>
-              <p className="text-sm">© 2025 FarmXpert</p>
-              <p className="text-sm">Chisinau {time}</p>
+          <div className="relative bottom-[36.5vw] px-8 font-sans font-semibold tracking-tight flex uppercase">
+            <div className="w-1/3" />
+
+            <div className="w-1/3">
+              <p className="text-[0.875vw]">© 2025 FarmXpert</p>
+              <p className="text-[0.875vw]">Chisinau {time}</p>
             </div>
+
+            <div className="w-1/3 flex justify-between">
+              <div className="flex flex-col">
+                <FlipText className="text-[0.875vw] cursor-pointer">
+                  Privacy Policy
+                </FlipText>
+                <FlipText className="text-[0.875vw] cursor-pointer">
+                  Terms of Service
+                </FlipText>
+              </div>
+
+              <p className="text-[0.875vw] cursor-pointer">Careless Whispers</p>
+            </div>
+
+            <p className="text-sm cursor-pointer">Careless Whispers</p>
           </div>
         </section>
       </div>
