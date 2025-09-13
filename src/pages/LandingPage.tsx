@@ -1,7 +1,26 @@
+import CurvedLoop from '@/components/CurvedLoop'
 import FlipText from '@/components/FlipText'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react'
 
 const LandingPage = () => {
+  const [time, setTime] = useState('')
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      const hours = String(now.getHours()).padStart(2, '0')
+      const minutes = String(now.getMinutes()).padStart(2, '0')
+      const seconds = String(now.getUTCSeconds()).padStart(2, '0')
+      setTime(`${hours}:${minutes}:${seconds}`)
+    }
+
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div>
       <section className="fixed overflow-hidden h-[100vh] w-screen bg-[url(/src/assets/farmhouse.jpg)] bg-cover bg-center z-0">
@@ -55,12 +74,16 @@ const LandingPage = () => {
             <div className="w-1/3" />
             <div className="w-[28%] text-xl">
               <img src="/src/assets/sheep.jpg" alt="sheep" className="mb-6" />
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-              non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+              We work closely with farmers, making sure they are heard and their needs are
+              met. We also work closely with the government, assuring met quotas and
+              seamless processing of data. Our belief also stands on hopes, dreams and
+              making them a reality for the hard working people out there.
+              <br />
+              <br />
+              While we seem a friendly and intuitive platform, it's in our goals that we
+              reach the peaks of organizational perfection. Helping others is the same as
+              helping yourself and that's why we motivate others to help each other,
+              because in the end we make our own lives better.
               <FlipText
                 childDivClassName="underline"
                 className="cursor-pointer underline mt-6"
@@ -71,37 +94,37 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="px-8 flex pt-[15rem]">
+        <section className="relative px-8 flex pt-[15rem] z-20">
           <div className="w-1/4">
-            <img src="src/assets/sheep.jpg" alt="solution" />
+            <img src="src/assets/tractor.jpg" alt="solution" />
 
             <div className="flex flex-col text-xl mt-8">
               <div className="border-b border-neutral-300 py-1">
-                <span className="text-neutral-400 mr-6 font-mono -tracking-[3px]">
+                <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (1)
                 </span>{' '}
                 Solution 1
               </div>
               <div className="border-b border-neutral-300 py-1">
-                <span className="text-neutral-400 mr-6 font-mono -tracking-[3px]">
+                <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (2)
                 </span>{' '}
                 Solution 2
               </div>
               <div className="border-b border-neutral-300 py-1">
-                <span className="text-neutral-400 mr-6 font-mono -tracking-[3px]">
+                <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (3)
                 </span>{' '}
                 Solution 3
               </div>
               <div className="border-b border-neutral-300 py-1">
-                <span className="text-neutral-400 mr-6 font-mono -tracking-[3px]">
+                <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (4)
                 </span>{' '}
                 Solution 4
               </div>
               <div className="border-b border-neutral-300 py-1">
-                <span className="text-neutral-400 mr-6 font-mono -tracking-[3px]">
+                <span className="text-neutral-400 mr-3 font-mono -tracking-[3px]">
                   (5)
                 </span>{' '}
                 Solution 5
@@ -109,13 +132,64 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="w-[50rem] ml-[12rem] text-6xl font-sans font-semibold indent-32">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-            doloremque laudantium, totam rem aperiam.
+          <div className="w-[50rem] ml-[12rem] text-6xl font-sans font-semibold indent-32 flex flex-col">
+            Our approach is designed to ease the work of every farmer in Moldova,
+            regardless of the size of their business, by implementing an AI assistant to
+            help with the beaurocratic processes.
             <br />
             <br />
-            Vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-            aspernatur aut odit aut fugit.
+            Our subsidies informational program motivates the user by giving specified
+            data to their field of work, this way prioritising the quality of life of the
+            user, productivity and motivation.
+            <div className="indent-0">
+              <Button
+                className="mt-12 cursor-pointer text-lg px-0 overflow-hidden"
+                size="lg"
+              >
+                <FlipText childDivClassName="py-6 px-8" className="py-6 px-8">
+                  Get Started Now
+                </FlipText>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section className="w-full bg-white -z-10">
+          <div className="invert relative bottom-[25vw]">
+            <CurvedLoop
+              marqueeText="Focused ✦ On ✦ Making ✦ Your ✦ Life ✦ Easier ✦ "
+              speed={1}
+              curveAmount={400}
+              direction="right"
+              interactive={false}
+              className="text-black"
+            />
+          </div>
+
+          <div className="flex relative bottom-[30vw]">
+            <div className="w-1/3" />
+
+            <div className="w-1/3">
+              <div>
+                <p className="uppercase">(navigation)</p>
+
+                <div className="flex flex-col text-5xl gap-2 font-sans font-semibold mt-6 tracking-tighter">
+                  <FlipText className="cursor-pointer uppercase">Beliefs</FlipText>
+                  <FlipText className="cursor-pointer uppercase">Solution</FlipText>
+                  <FlipText className="cursor-pointer uppercase">Get Started</FlipText>
+                  <FlipText className="cursor-pointer uppercase">Contact Us</FlipText>
+                  <FlipText className="cursor-pointer uppercase">Login</FlipText>
+                  <FlipText className="cursor-pointer uppercase">Register</FlipText>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative bottom-[25vw] px-8 font-sans font-semibold tracking-tight">
+            <div>
+              <p className="text-sm">© 2025 FarmXpert</p>
+              <p className="text-sm">Chisinau {time}</p>
+            </div>
           </div>
         </section>
       </div>

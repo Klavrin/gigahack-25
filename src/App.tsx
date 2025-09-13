@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { createClient } from '@supabase/supabase-js'
 import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import LandingPage from './pages/LandingPage'
+import Lenis from 'lenis'
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -11,6 +13,25 @@ const supabase = createClient(
 )
 
 const App = () => {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.8,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+    })
+
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+
+    return () => {
+      // cleanup on unmount
+      lenis.destroy()
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
