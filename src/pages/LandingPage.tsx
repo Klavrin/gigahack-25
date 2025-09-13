@@ -4,10 +4,29 @@ import CurvedLoop from '@/components/CurvedLoop'
 import FlipText from '@/components/FlipText'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
+import Lenis from 'lenis'
 
 const LandingPage = () => {
   const [time, setTime] = useState('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.8,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+    })
+
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+
+    return () => {
+      lenis.destroy()
+    }
+  }, [])
 
   useEffect(() => {
     const updateTime = () => {

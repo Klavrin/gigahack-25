@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <ThemeTogglerButton className="active:scale-95 transition-all" />
           </div>
           <MobileHeader />
-          <div className="max-h-full bg-blue-500 w-full font-['Nunito'] px-4 overflow-y-scroll">
+          <div className="min-h-full w-full font-['Nunito'] px-4 overflow-y-scroll mt-[65px] pb-12 md:mt-0">
             {children}
           </div>
           <MobileNav />

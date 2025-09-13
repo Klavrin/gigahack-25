@@ -28,7 +28,7 @@ const MobileHeader = () => {
   const togglerRef = useRef<HTMLButtonElement>(null)
 
   return (
-    <header className="py-2 px-4 bg-neutral-100 dark:bg-neutral-900 md:hidden block border-b">
+    <header className="py-2 px-4 bg-neutral-100 dark:bg-neutral-900 md:hidden block border-b fixed w-full">
       <Sheet>
         <SheetTrigger>
           <Button className="min-w-12 min-h-12 cursor-pointer" variant="ghost">
