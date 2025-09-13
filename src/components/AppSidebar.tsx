@@ -60,7 +60,7 @@ const footerItems = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="md:block hidden">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="font-sans text-xl mb-2">
