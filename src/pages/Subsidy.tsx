@@ -29,7 +29,6 @@ const cardVariants: Variants = {
   }
 }
 
-// Shake + scale animation
 const shakeAnimation = {
   rotate: [0, -20, 20, -20, 20, 0],
   scale: [1, 1.4, 1.4, 1.4, 1.4, 1],
@@ -49,35 +48,37 @@ const Subsidy = () => {
 
   return (
     <Layout>
-      <div className="text-4xl pt-6 font-bold">Recommended Subsidies</div>
+      <div className="max-w-[60rem] mx-auto">
+        <div className="text-4xl pt-6 font-bold">Recommended Subsidies</div>
 
-      <motion.div
-        className="mt-4"
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-      >
-        {typeSubsidies.map((item) => (
-          <motion.div
-            key={item.name}
-            className="p-4 mt-4 border border-border rounded-lg hover:shadow-lg transition-shadow cursor-pointer"
-            variants={cardVariants}
-          >
-            <div className="flex gap-2 items-center">
-              {item.starred && (
-                <motion.div animate={controls} className="inline-block">
-                  <Star color="#fcba03" fill="#fcba03" />
-                </motion.div>
-              )}
-              <div className="text-2xl font-semibold">{item.name}</div>
-            </div>
-            <div className="mt-2 text-md md:text-sm text-muted-foreground">
-              Detailed information about {item.name} including eligibility criteria,
-              application process, and benefits.
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+        <motion.div
+          className="mt-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
+          {typeSubsidies.map((item) => (
+            <motion.div
+              key={item.name}
+              className="p-4 mt-4 border border-border rounded-lg hover:shadow-lg transition-shadow cursor-pointer"
+              variants={cardVariants}
+            >
+              <div className="flex gap-2 items-center">
+                {item.starred && (
+                  <motion.div animate={controls} className="inline-block">
+                    <Star color="#fcba03" fill="#fcba03" />
+                  </motion.div>
+                )}
+                <div className="text-2xl font-semibold">{item.name}</div>
+              </div>
+              <div className="mt-2 text-md md:text-sm text-muted-foreground">
+                Detailed information about {item.name} including eligibility criteria,
+                application process, and benefits.
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </Layout>
   )
 }
