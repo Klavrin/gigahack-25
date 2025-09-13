@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <SidebarTrigger size="lg" className="active:scale-95 cursor-pointer" />
           <ThemeTogglerButton className="active:scale-95 transition-all" />
         </div>
-        <div className="min-h-screen w-full font-sans px-4">{children}</div>
+        <div className="min-h-screen w-full font-['Nunito'] px-4">{children}</div>
       </main>
     </SidebarProvider>
   )

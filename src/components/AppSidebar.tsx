@@ -68,8 +68,11 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent className="font-sans">
             <SidebarMenu>
-              <SidebarMenuItem key="add" className="mb-4">
-                <SidebarMenuButton asChild className="active:scale-95 transition-all">
+              <SidebarMenuItem key="add" className="mb-2">
+                <SidebarMenuButton
+                  asChild
+                  className="active:scale-95 transition-all cursor-pointer"
+                >
                   <Button className="bg-blue-700">
                     <Plus />
                     <span>Add</span>
@@ -79,10 +82,7 @@ export function AppSidebar() {
 
               {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className="active:scale-95 transition-all hover:bg-neutral-200"
-                  >
+                  <SidebarMenuButton asChild className="active:scale-95 transition-all">
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
