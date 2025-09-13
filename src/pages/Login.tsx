@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const Login = () => {
   return (
     <div>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen font-sans">
         <div className="xl:w-[40%] w-full flex flex-col p-6 justify-center items-center">
           <div className="flex flex-col gap-1 items-center mb-4">
             <h1 className="text-3xl font-semibold">Login</h1>

@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 const Register = () => {
   return (
     <div>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen font-sans">
         <div className="w-[60%] xl:block hidden overflow-hidden invert">
           <Dither mouseRadius={0.2} colorNum={5} />
         </div>
