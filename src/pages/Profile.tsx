@@ -60,7 +60,10 @@ const Profile = () => {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-12 mb-8">
           <Avatar className="w-32 h-32">
             <AvatarImage src="/farmer-avatar.jpg" alt="Farmer Profile Picture" />
-            <AvatarFallback>F</AvatarFallback>
+            <AvatarFallback>
+              {user.firstName[0]}
+              {user.lastName[0]}
+            </AvatarFallback>
           </Avatar>
           <div className="text-center sm:text-left">
             <h1 className="text-3xl font-bold tracking-tight">
@@ -68,13 +71,15 @@ const Profile = () => {
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               {/* Sustainable Farmer | Crop Enthusiast | Livestock Caretaker */}
-              <span className="font-bold">Business Id:</span> {user.businessId} |{' '}
+              <span className="font-bold">IDNO:</span> {user.businessId} |{' '}
               <span className="font-bold">Email:</span> {user.email} |{' '}
               <span className="font-bold">Phone:</span> {user.phone}
             </p>
             <div className="mt-4 flex justify-center sm:justify-start gap-3">
               <Button variant="outline">Edit Profile</Button>
-              <Button variant="default">Farm Settings</Button>
+              <Button variant="default" className="bg-emerald-600 hover:bg-emerald-800">
+                Farm Settings
+              </Button>
             </div>
           </div>
         </div>
@@ -96,7 +101,7 @@ const Profile = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <Card className="text-center p-4">
             <CardTitle className="text-2xl">50</CardTitle>
-            <CardDescription>Acres Farmed</CardDescription>
+            <CardDescription>Hectares Farmed</CardDescription>
           </Card>
           <Card className="text-center p-4">
             <CardTitle className="text-2xl">200</CardTitle>

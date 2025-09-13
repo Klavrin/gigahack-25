@@ -53,8 +53,8 @@ export function AppSidebar() {
   const location = useLocation()
 
   return (
-    <Sidebar className="md:block hidden border-r border-gray-200 dark:border-gray-800 font-['Nunito']">
-      <SidebarContent className="bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950">
+    <Sidebar className="md:block hidden border-r border-gray-200 dark:border-neutral-800 font-['Nunito']">
+      <SidebarContent className="bg-slate-50 dark:bg-neutral-900">
         <SidebarGroup className="px-4 py-6">
           <SidebarGroupLabel className="font-bold text-2xl mb-8 text-green-700 dark:text-green-400 tracking-tight">
             🌾 FarmXpert
@@ -67,9 +67,9 @@ export function AppSidebar() {
                   asChild
                   className="hover:scale-[1.02] transition-all duration-200 shadow-sm"
                 >
-                  <Button className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 active:scale-[0.98] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border-0">
-                    <Plus className="w-5 h-5 mr-2" />
-                    <span className="text-base">Add New</span>
+                  <Button className="w-full h-12 bg-emerald-600 active:scale-[0.98] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border-0">
+                    <Plus className="w-5 h-5" />
+                    <span className="text-base">Add</span>
                   </Button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -102,7 +102,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 p-4">
+      <SidebarFooter className="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/50 p-4">
         <SidebarMenu className="space-y-1">
           {footerItems.map((item) => (
             <SidebarMenuItem key={item.title}>
