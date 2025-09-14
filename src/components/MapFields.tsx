@@ -57,7 +57,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
       edit: { featureGroup: drawnItemsRef.current },
       draw: {
         polygon: { allowIntersection: false, showArea: true },
-        rectangle: { showArea: true },
+        rectangle: false,
         circle: false,
         polyline: { metric: true },
         marker: false,
