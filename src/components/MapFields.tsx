@@ -43,7 +43,6 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
 
   useEffect(() => {
     if (mapRef.current) return;
-
     const map = L.map("map").setView([47.0, 28.8], 7);
     mapRef.current = map;
 
@@ -65,7 +64,6 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
     });
     map.addControl(drawControl);
 
-    // Load existing fields
     const fetchFields = async () => {
       try {
         const res = await axios.get<Field[]>(
@@ -73,7 +71,6 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setFields(res.data);
-
         res.data.forEach((f) => {
           f.coords.forEach((polyCoords) => {
             const polygon = L.polygon(polyCoords, { color: "green" }).addTo(
@@ -81,9 +78,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
             );
             (polygon as any).fieldId = f.id;
             polygon.bindPopup(
-              `Crop: ${f.cropType}, Size: ${f.size} ha, Soil: ${
-                f.soilType || "-"
-              }`
+              `Crop: ${f.cropType}, Size: ${f.size} ha, Soil: ${f.soilType || "-"}`
             );
           });
         });
@@ -93,124 +88,12 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
     };
     fetchFields();
 
-    // Create polygon or polyline
-    map.on(L.Draw.Event.CREATED, async (event: any) => {
-      const layer = event.layer as Polygon | Polyline | L.Rectangle;
-
-  drawnItemsRef.current.addLayer(layer);
-
-  let coords: LatLngTuple[][] = [];
-
-  // Treat Polygon and Rectangle the same way
-  if (layer instanceof L.Polygon) {
-    const latlngs = layer.getLatLngs() as L.LatLng[][] | L.LatLng[][][];
-    if (Array.isArray(latlngs[0][0])) {
-      coords = (latlngs as L.LatLng[][][]).map((poly) =>
-        poly[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
-      );
-    } else {
-      coords = [
-        (latlngs as L.LatLng[][])[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple),
-      ];
-    }
-  } else if (layer instanceof L.Polyline) {
-    const latlngs = layer.getLatLngs() as L.LatLng[];
-    coords = [latlngs.map((ll) => [ll.lat, ll.lng] as LatLngTuple)];
-  }
-
-      const payload: Field = {
-        businessId,
-        cropType: fieldData.cropType,
-        size: Number(fieldData.size),
-        soilType: fieldData.soilType,
-        fertiliser: fieldData.fertiliser,
-        herbicide: fieldData.herbicide,
-        coords,
-      };
-
-      try {
-        const res = await axios.post<Field>(
-          `${import.meta.env.VITE_BACKEND_URL}/fields/${businessId}`,
-          payload,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        (layer as any).fieldId = res.data.id;
-        layer.bindPopup(
-          `Crop: ${res.data.cropType}, Size: ${res.data.size} ha, Soil: ${
-            res.data.soilType || "-"
-          }`
-        );
-        setFields((prev) => [...prev, res.data]);
-      } catch (err) {
-        console.error(err);
-      }
-
-      setFieldData({
-        cropType: "",
-        size: 0,
-        soilType: "",
-        fertiliser: "",
-        herbicide: "",
-      });
-    });
-
-    // Edit polygon
-    map.on(L.Draw.Event.EDITED, async (event: any) => {
-      event.layers.eachLayer(async (layer: any) => {
-        const latlngs = layer.getLatLngs() as L.LatLng[][] | L.LatLng[][][];
-        let coords: LatLngTuple[][] = [];
-
-        if (Array.isArray(latlngs[0][0])) {
-          coords = (latlngs as L.LatLng[][][]).map((poly) =>
-            poly[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
-          );
-        } else {
-          coords = [
-            (latlngs as L.LatLng[][])[0].map(
-              (ll) => [ll.lat, ll.lng] as LatLngTuple
-            ),
-          ];
-        }
-
-        try {
-          await axios.put(
-            `${import.meta.env.VITE_BACKEND_URL}/fields/${layer.fieldId}`,
-            { coords },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-
-          setFields((prev) =>
-            prev.map((f) => (f.id === layer.fieldId ? { ...f, coords } : f))
-          );
-        } catch (err) {
-          console.error(err);
-        }
-      });
-    });
-
-    // Delete polygon
-    map.on(L.Draw.Event.DELETED, async (event: any) => {
-      event.layers.eachLayer(async (layer: any) => {
-        try {
-          await axios.delete(
-            `${import.meta.env.VITE_BACKEND_URL}/fields/${layer.fieldId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-
-          setFields((prev) => prev.filter((f) => f.id !== layer.fieldId));
-        } catch (err) {
-          console.error(err);
-        }
-      });
-    });
-
     return () => {
       map.remove();
       mapRef.current = null;
     };
-  }, [businessId, token, fieldData]);
+  }, [businessId, token]);
 
-  // Zoom to field on click
   const handleFieldClick = (field: Field) => {
     if (!mapRef.current) return;
     const layer = drawnItemsRef.current
@@ -222,7 +105,6 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
     }
   };
 
-  // Delete field from list and map
   const handleDeleteField = async (field: Field) => {
     if (!field.id) return;
     try {
@@ -230,9 +112,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         `${import.meta.env.VITE_BACKEND_URL}/fields/${field.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setFields((prev) => prev.filter((f) => f.id !== field.id));
-
       const layer = drawnItemsRef.current
         .getLayers()
         .find((l: any) => l.fieldId === field.id);
@@ -243,69 +123,89 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
   };
 
   return (
-    <div>
-      <div className="field-form mb-4 flex flex-col gap-2">
-        <label>
-          Crop Type:
+    <div className="space-y-6">
+      {/* --- Redesigned Inputs --- */}
+      <div className="field-form mb-4 grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700 dark:text-white">
+            Crop Type
+          </label>
           <input
             name="cropType"
             value={fieldData.cropType}
             onChange={handleInputChange}
+            className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:text-white"
+            placeholder="e.g. Wheat"
           />
-        </label>
-        <label>
-          Size (ha):
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700 dark:text-white">
+            Size (ha)
+          </label>
           <input
             type="number"
             name="size"
             value={fieldData.size}
             onChange={handleInputChange}
+            className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:text-white"
           />
-        </label>
-        <label>
-          Soil Type:
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700 dark:text-white">
+            Soil Type
+          </label>
           <input
             name="soilType"
             value={fieldData.soilType}
             onChange={handleInputChange}
+            className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:text-white"
           />
-        </label>
-        <label>
-          Fertiliser:
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700 dark:text-white">
+            Fertiliser
+          </label>
           <input
             name="fertiliser"
             value={fieldData.fertiliser}
             onChange={handleInputChange}
+            className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:text-white"
           />
-        </label>
-        <label>
-          Herbicide:
+        </div>
+
+        <div className="flex flex-col sm:col-span-2">
+          <label className="mb-1 text-sm font-medium text-gray-700 dark:text-white">
+            Herbicide
+          </label>
           <input
             name="herbicide"
             value={fieldData.herbicide}
             onChange={handleInputChange}
+            className="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:text-white"
           />
-        </label>
+        </div>
       </div>
 
-      <div id="map" style={{ height: "500px" }} />
+      <div id="map" style={{ height: "500px" }} className="rounded-lg overflow-hidden" />
 
-      <div className="mt-4">
-        <h2 className="text-lg font-bold mb-2">Fields List</h2>
+      {/* --- Fields List --- */}
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold mb-2 dark:text-white">Fields List</h2>
         <ul className="space-y-2">
           {fields.map((f) => (
             <li
               key={f.id}
-              className="flex justify-between items-center cursor-pointer p-2 border rounded hover:bg-green-100"
+              className="flex justify-between items-center cursor-pointer p-3 border rounded-lg hover:bg-green-50 dark:hover:bg-gray-700 transition"
               onClick={() => handleFieldClick(f)}
             >
-              <div>
-                <strong>{f.cropType}</strong> | Size: {f.size} ha | Soil:{" "}
-                {f.soilType || "-"} | Fertiliser: {f.fertiliser || "-"} | Herbicide:{" "}
-                {f.herbicide || "-"}
+              <div className="text-sm text-gray-800 dark:text-white">
+                <strong>{f.cropType}</strong> | Size: {f.size} ha | Soil: {f.soilType || "-"} | Fertiliser: {f.fertiliser || "-"} | Herbicide: {f.herbicide || "-"}
               </div>
               <button
-                className="ml-2 text-red-600 hover:text-red-800"
+                className="ml-3 text-red-600 hover:text-red-800 text-sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDeleteField(f);

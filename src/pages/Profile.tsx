@@ -25,8 +25,9 @@ const Profile = ({ isOpen, setIsOpen, supabase }: ProfileProps) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem('accessToken')
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/me`, {
+      const token = localStorage.getItem('accessToken');
+      const businessId = localStorage.getItem('businessId');
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/${businessId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
