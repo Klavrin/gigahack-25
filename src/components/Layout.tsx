@@ -4,11 +4,21 @@ import MobileNav from './MobileNav'
 import { ThemeTogglerButton } from './animate-ui/components/buttons/theme-toggler'
 import { SidebarProvider, SidebarTrigger } from './ui/sidebar'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  isOpen,
+  setIsOpen,
+  supabase
+}: {
+  children: React.ReactNode
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+  supabase: any
+}) {
   return (
     <>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase} />
         <main className="w-full">
           <div className="px-4 py-2 w-full md:flex hidden items-center justify-between">
             <SidebarTrigger size="lg" className="active:scale-95 cursor-pointer" />

@@ -11,9 +11,15 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import axios from 'axios'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, BadgeInfo } from 'lucide-react'
 
-const Profile = () => {
+interface ProfileProps {
+  isOpen: boolean
+  setIsOpen: (open: boolean) => void
+  supabase: any
+}
+
+const Profile = ({ isOpen, setIsOpen, supabase }: ProfileProps) => {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
@@ -41,7 +47,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase}>
         <div className="flex items-center justify-center h-screen">
           <LoaderCircle className="animate-spin" />
         </div>
@@ -50,7 +56,7 @@ const Profile = () => {
   }
 
   return (
-    <Layout>
+    <Layout isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -67,7 +73,8 @@ const Profile = () => {
           </Avatar>
           <div className="text-center sm:text-left">
             <h1 className="text-3xl font-bold tracking-tight">
-              {user.firstName} {user.lastName}
+              {user.firstName} {user.lastName}{' '}
+              {user.verified && <BadgeInfo className="inline-block ml-2 text-blue-500" />}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               {/* Sustainable Farmer | Crop Enthusiast | Livestock Caretaker */}
