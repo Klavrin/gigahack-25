@@ -1,56 +1,57 @@
-import React, { useEffect, useRef, useState } from "react";
-import L, { FeatureGroup, Polygon, Polyline, type LatLngTuple } from "leaflet";
-import "leaflet-draw";
-import "leaflet/dist/leaflet.css";
-import "leaflet-draw/dist/leaflet.draw.css";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from 'react'
+import L, { FeatureGroup, Polygon, Polyline, type LatLngTuple } from 'leaflet'
+import 'leaflet-draw'
+import 'leaflet/dist/leaflet.css'
+import 'leaflet-draw/dist/leaflet.draw.css'
+import axios from 'axios'
+import { Input } from './ui/input'
 
 export interface Field {
-  id?: number;
-  businessId: number;
-  cropType: string;
-  coords: LatLngTuple[][];
-  size: number;
-  soilType?: string;
-  fertiliser?: string;
-  herbicide?: string;
+  id?: number
+  businessId: number
+  cropType: string
+  coords: LatLngTuple[][]
+  size: number
+  soilType?: string
+  fertiliser?: string
+  herbicide?: string
 }
 
 interface MapFieldsProps {
-  businessId: number;
-  token: string;
+  businessId: number
+  token: string
 }
 
 const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
-  const mapRef = useRef<L.Map | null>(null);
-  const drawnItemsRef = useRef<FeatureGroup>(new L.FeatureGroup());
-  const [fields, setFields] = useState<Field[]>([]);
+  const mapRef = useRef<L.Map | null>(null)
+  const drawnItemsRef = useRef<FeatureGroup>(new L.FeatureGroup())
+  const [fields, setFields] = useState<Field[]>([])
 
   const [fieldData, setFieldData] = useState({
-    cropType: "",
+    cropType: '',
     size: 0,
-    soilType: "",
-    fertiliser: "",
-    herbicide: "",
-  });
+    soilType: '',
+    fertiliser: '',
+    herbicide: ''
+  })
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFieldData((prev) => ({ ...prev, [name]: value }));
-  };
+    const { name, value } = e.target
+    setFieldData((prev) => ({ ...prev, [name]: value }))
+  }
 
   useEffect(() => {
     if (mapRef.current) return;
     const map = L.map("map").setView([47.0, 28.8], 7);
     mapRef.current = map;
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map)
 
-    drawnItemsRef.current.addTo(map);
+    drawnItemsRef.current.addTo(map)
 
     const drawControl = new L.Control.Draw({
       edit: { featureGroup: drawnItemsRef.current },
@@ -73,17 +74,17 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         setFields(res.data);
         res.data.forEach((f) => {
           f.coords.forEach((polyCoords) => {
-            const polygon = L.polygon(polyCoords, { color: "green" }).addTo(
+            const polygon = L.polygon(polyCoords, { color: 'green' }).addTo(
               drawnItemsRef.current
-            );
-            (polygon as any).fieldId = f.id;
+            )
+            ;(polygon as any).fieldId = f.id
             polygon.bindPopup(
               `Crop: ${f.cropType}, Size: ${f.size} ha, Soil: ${f.soilType || "-"}`
             );
           });
         });
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
     };
     fetchFields();
@@ -95,18 +96,18 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
   }, [businessId, token]);
 
   const handleFieldClick = (field: Field) => {
-    if (!mapRef.current) return;
+    if (!mapRef.current) return
     const layer = drawnItemsRef.current
       .getLayers()
-      .find((l: any) => l.fieldId === field.id) as Polygon;
+      .find((l: any) => l.fieldId === field.id) as Polygon
     if (layer) {
-      mapRef.current.fitBounds(layer.getBounds());
-      layer.openPopup();
+      mapRef.current.fitBounds(layer.getBounds())
+      layer.openPopup()
     }
-  };
+  }
 
   const handleDeleteField = async (field: Field) => {
-    if (!field.id) return;
+    if (!field.id) return
     try {
       await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/fields/${field.id}`,
@@ -115,12 +116,12 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
       setFields((prev) => prev.filter((f) => f.id !== field.id));
       const layer = drawnItemsRef.current
         .getLayers()
-        .find((l: any) => l.fieldId === field.id);
-      if (layer) drawnItemsRef.current.removeLayer(layer);
+        .find((l: any) => l.fieldId === field.id)
+      if (layer) drawnItemsRef.current.removeLayer(layer)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -207,8 +208,8 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
               <button
                 className="ml-3 text-red-600 hover:text-red-800 text-sm"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteField(f);
+                  e.stopPropagation()
+                  handleDeleteField(f)
                 }}
               >
                 Delete
@@ -218,7 +219,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MapFields;
+export default MapFields

@@ -27,7 +27,7 @@ const contentItems = [
     icon: Map
   },
   {
-    title: 'Subsidy',
+    title: 'Subsidies',
     url: '/subsidy',
     icon: FilePen
   },

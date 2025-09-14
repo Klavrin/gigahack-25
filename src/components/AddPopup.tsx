@@ -158,20 +158,20 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
             onClick={(e) => e.stopPropagation()}
             className="w-[95vw] max-w-2xl h-[90vh] max-h-[700px]"
           >
-            <Card className="w-full h-full bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 border border-green-200 dark:border-gray-700 shadow-2xl overflow-hidden p-0 pb-6">
+            <Card className="w-full h-full bg-gradient-to-b bg-neutral-100 dark:bg-neutral-900 border border-green-200 dark:border-neutral-700 shadow-2xl overflow-hidden p-0 pb-6">
               {/* Header */}
-              <div className="relative p-6 pb-4 border-b border-green-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800">
+              <div className="relative p-6 pb-4 border-b border-green-200 dark:border-neutral-700 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-neutral-800 dark:to-neutral-800">
                 <button
                   onClick={() => {
                     setIsOpen(false)
                     resetForms()
                   }}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 hover:scale-110"
                 >
-                  <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  <X className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
                 </button>
 
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-neutral-800 dark:text-white mb-2">
                   Add New Record
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">

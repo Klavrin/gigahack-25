@@ -28,7 +28,7 @@ export default function Layout({
           <div className="min-h-full w-full font-['Nunito'] px-4 overflow-y-scroll mt-[65px] pb-12 md:mt-0">
             {children}
           </div>
-          <MobileNav />
+          <MobileNav isOpen={isOpen} setIsOpen={setIsOpen} />
         </main>
       </SidebarProvider>
     </>
