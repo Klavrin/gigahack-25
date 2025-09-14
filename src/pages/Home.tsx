@@ -1,13 +1,14 @@
 import Layout from '@/components/Layout'
-import { MapPin, Plus, Activity, Users, File, Panda } from 'lucide-react'
+import { MapPin, Plus, Activity, Users, File, Panda, DollarSign } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface HomeProps {
   isOpen: boolean
   setIsOpen: (item: boolean) => void
+  supabase: any
 }
 
-const Home = ({ isOpen, setIsOpen }: HomeProps) => {
+const Home = ({ isOpen, setIsOpen, supabase }: HomeProps) => {
   const quickActions = [
     {
       title: 'Add New',
@@ -33,10 +34,10 @@ const Home = ({ isOpen, setIsOpen }: HomeProps) => {
       func: () => null
     },
     {
-      title: 'Find Other Farmers',
-      icon: Users,
+      title: 'Finances',
+      icon: DollarSign,
       color: 'bg-orange-500',
-      link: '/find-others',
+      link: '/finances',
       func: () => null
     }
   ]
@@ -58,7 +59,7 @@ const Home = ({ isOpen, setIsOpen }: HomeProps) => {
 
   return (
     <>
-      <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Layout isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase}>
         <div className="min-h-screen pt-8 max-w-[60rem] mx-auto">
           <div className="px-2 pb-4">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">

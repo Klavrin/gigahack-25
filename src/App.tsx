@@ -33,15 +33,18 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<Home isOpen={isOpen} setIsOpen={setIsOpen} />} />
+        <Route
+          path="/home"
+          element={<Home isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase} />}
+        />
         <Route
           path="/subsidy"
-          element={<Subsidy isOpen={isOpen} setIsOpen={setIsOpen} />}
+          element={<Subsidy isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase} />}
         />
         <Route path="/map" element={<Map />} />
         <Route
           path="/profile"
-          element={<Profile isOpen={isOpen} setIsOpen={setIsOpen} />}
+          element={<Profile isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase} />}
         />
         <Route
           path="/livestock"

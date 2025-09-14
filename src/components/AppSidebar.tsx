@@ -53,10 +53,12 @@ const footerItems = [
 
 export function AppSidebar({
   isOpen,
-  setIsOpen
+  setIsOpen,
+  supabase
 }: {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
+  supabase: any
 }) {
   const location = useLocation()
 
@@ -137,7 +139,7 @@ export function AppSidebar({
         </SidebarFooter>
       </Sidebar>
 
-      <AddPopup isOpen={isOpen} setIsOpen={setIsOpen} />
+      <AddPopup isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase} />
     </>
   )
 }

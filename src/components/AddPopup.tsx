@@ -12,12 +12,14 @@ import {
   Hash,
   User,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Warehouse
 } from 'lucide-react'
 
 interface AddPopupProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
+  supabase?: any
 }
 
 interface LivestockData {
@@ -33,8 +35,10 @@ interface FinanceData {
   businessId: string
 }
 
-const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
-  const [activeTab, setActiveTab] = useState<'livestock' | 'finances'>('livestock')
+const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
+  const [activeTab, setActiveTab] = useState<'livestock' | 'finances' | 'equipment'>(
+    'livestock'
+  )
   const [livestockData, setLivestockData] = useState<LivestockData>({
     species: '',
     sex: '',
@@ -47,17 +51,56 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
     businessId: ''
   })
 
-  const handleLivestockSubmit = (e: React.FormEvent) => {
+  const handleLivestockSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Livestock data:', livestockData)
-    // Handle livestock submission here
+
+    const { data, error } = await supabase
+      .from('animal')
+      .insert([
+        {
+          species: livestockData.species,
+          sex: livestockData.sex,
+          birthDate: livestockData.birthDate,
+          cattleId: livestockData.cattleId
+        }
+      ])
+      .select()
+
+    if (error) {
+      console.error('Error inserting animal:', error)
+    } else {
+      console.log('Inserted:', data)
+      setLivestockData({
+        species: '',
+        sex: '',
+        birthDate: '',
+        cattleId: ''
+      })
+    }
+
     setIsOpen(false)
   }
 
-  const handleFinanceSubmit = (e: React.FormEvent) => {
+  const handleFinanceSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Finance data:', financeData)
-    // Handle finance submission here
+
+    const { data, error } = await supabase.from('finance').insert({
+      yearlyIncome: financeData.yearlyIncome,
+      yearlyExpenses: financeData.yearlyExpenses,
+      businessId: financeData.businessId
+    })
+    if (error) {
+      console.error('Error inserting animal:', error)
+    } else {
+      console.log('Inserted:', data)
+      setFinanceData({
+        yearlyIncome: '',
+        yearlyExpenses: '',
+        businessId: ''
+      })
+    }
     setIsOpen(false)
   }
 
@@ -133,10 +176,20 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                     <DollarSign className="w-5 h-5" />
                     <span>Finances</span>
                   </button>
+                  <button
+                    onClick={() => setActiveTab('equipment')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
+                      activeTab === 'equipment'
+                        ? 'bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                    }`}
+                  >
+                    <Warehouse className="w-5 h-5" />
+                    <span>Machinery</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Content Area */}
               <div className="px-6 flex-1 overflow-y-auto">
                 <AnimatePresence mode="wait">
                   {activeTab === 'livestock' ? (
@@ -150,7 +203,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                       className="space-y-6"
                     >
                       <div className="grid gap-6">
-                        {/* Species */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="species"
@@ -173,7 +225,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                           />
                         </div>
 
-                        {/* Sex */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="sex"
@@ -196,7 +247,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                           </select>
                         </div>
 
-                        {/* Birth Date */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="birthDate"
@@ -219,7 +269,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                           />
                         </div>
 
-                        {/* Cattle ID */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="cattleId"
@@ -277,7 +326,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                       className="space-y-6"
                     >
                       <div className="grid gap-6">
-                        {/* Yearly Income */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="yearlyIncome"
@@ -301,7 +349,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                           />
                         </div>
 
-                        {/* Yearly Expenses */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="yearlyExpenses"
@@ -325,7 +372,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                           />
                         </div>
 
-                        {/* Business ID */}
                         <div className="space-y-2">
                           <Label
                             htmlFor="businessId"
@@ -349,7 +395,6 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                           />
                         </div>
 
-                        {/* Net Profit Preview */}
                         {financeData.yearlyIncome && financeData.yearlyExpenses && (
                           <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200 dark:border-green-800">
                             <div className="flex items-center justify-between">
@@ -374,6 +419,27 @@ const AddPopup = ({ isOpen, setIsOpen }: AddPopupProps) => {
                             </div>
                           </div>
                         )}
+                      </div>
+                      <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex gap-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                              setIsOpen(false)
+                              resetForms()
+                            }}
+                            className="flex-1 h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            type="submit"
+                            className="flex-1 h-12 bg-gradient-to-r bg-emerald-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                          >
+                            Add Finances
+                          </Button>
+                        </div>
                       </div>
                     </motion.form>
                   )}
