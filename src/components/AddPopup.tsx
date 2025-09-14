@@ -35,78 +35,106 @@ interface FinanceData {
   businessId: string
 }
 
+interface VehicleData {
+  vehicleType: string
+  fabricationDate: string
+  brand: string
+  vehicleGroupId: string
+}
+
 const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
-  const [activeTab, setActiveTab] = useState<'livestock' | 'finances' | 'equipment'>(
-    'livestock'
-  )
+  const [activeTab, setActiveTab] = useState<'livestock' | 'finances' | 'vehicle'>('livestock')
+
   const [livestockData, setLivestockData] = useState<LivestockData>({
     species: '',
     sex: '',
     birthDate: '',
     cattleId: ''
   })
+
   const [financeData, setFinanceData] = useState<FinanceData>({
     yearlyIncome: '',
     yearlyExpenses: '',
     businessId: ''
   })
 
+  const [vehicleData, setVehicleData] = useState<VehicleData>({
+    vehicleType: '',
+    fabricationDate: '',
+    brand: '',
+    vehicleGroupId: ''
+  })
+
+  const token = localStorage.getItem('accessToken')
+
+  // ---- Submits ----
   const handleLivestockSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Livestock data:', livestockData)
-
-    const { data, error } = await supabase
-      .from('animal')
-      .insert([
-        {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/animal`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
           species: livestockData.species,
           sex: livestockData.sex,
-          birthDate: livestockData.birthDate,
-          cattleId: livestockData.cattleId
-        }
-      ])
-      .select()
-
-    if (error) {
-      console.error('Error inserting animal:', error)
-    } else {
-      console.log('Inserted:', data)
-      setLivestockData({
-        species: '',
-        sex: '',
-        birthDate: '',
-        cattleId: ''
+          birthDate: livestockData.birthDate || null,
+          cattleId: Number(livestockData.cattleId)
+        })
       })
+      if (!res.ok) throw new Error(await res.text())
+      console.log('Inserted:', await res.json())
+      setLivestockData({ species: '', sex: '', birthDate: '', cattleId: '' })
+      setIsOpen(false)
+    } catch (error) {
+      console.error('Error inserting animal:', error)
     }
-
-    setIsOpen(false)
   }
 
   const handleFinanceSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Finance data:', financeData)
-
     const { data, error } = await supabase.from('finance').insert({
       yearlyIncome: financeData.yearlyIncome,
       yearlyExpenses: financeData.yearlyExpenses,
       businessId: financeData.businessId
     })
-    if (error) {
-      console.error('Error inserting animal:', error)
-    } else {
-      console.log('Inserted:', data)
-      setFinanceData({
-        yearlyIncome: '',
-        yearlyExpenses: '',
-        businessId: ''
-      })
-    }
+    if (error) console.error('Error inserting finance:', error)
+    else console.log('Inserted:', data)
+    setFinanceData({ yearlyIncome: '', yearlyExpenses: '', businessId: '' })
     setIsOpen(false)
+  }
+
+  const handleVehicleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/vehicle`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          vehicleType: vehicleData.vehicleType,
+          fabricationDate: Number(vehicleData.fabricationDate),
+          brand: vehicleData.brand,
+          vehicleGroupId: Number(vehicleData.vehicleGroupId)
+        })
+      })
+      if (!res.ok) throw new Error(await res.text())
+      console.log('Inserted:', await res.json())
+      setVehicleData({ vehicleType: '', fabricationDate: '', brand: '', vehicleGroupId: '' })
+      setIsOpen(false)
+    } catch (err) {
+      console.error('Error inserting vehicle:', err)
+    }
   }
 
   const resetForms = () => {
     setLivestockData({ species: '', sex: '', birthDate: '', cattleId: '' })
     setFinanceData({ yearlyIncome: '', yearlyExpenses: '', businessId: '' })
+    setVehicleData({ vehicleType: '', fabricationDate: '', brand: '', vehicleGroupId: '' })
   }
 
   return (
@@ -147,52 +175,36 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                   Add New Record
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Add livestock or financial data to your farm records
+                  Add livestock, financial, or vehicle data to your farm records
                 </p>
               </div>
 
-              {/* Tab Navigation */}
+              {/* Tabs */}
               <div className="px-6 pb-4">
-                <div className="flex bg-gray-100 dark:bg-neutral-800 rounded-lg p-1">
-                  <button
-                    onClick={() => setActiveTab('livestock')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
-                      activeTab === 'livestock'
-                        ? 'bg-white dark:bg-neutral-700 text-green-600 dark:text-green-400 shadow-sm'
-                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
-                    }`}
-                  >
-                    <Beef className="w-5 h-5" />
-                    <span>Livestock</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('finances')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
-                      activeTab === 'finances'
-                        ? 'bg-white dark:bg-neutral-700 text-green-600 dark:text-green-400 shadow-sm'
-                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
-                    }`}
-                  >
-                    <DollarSign className="w-5 h-5" />
-                    <span>Finances</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('equipment')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
-                      activeTab === 'equipment'
-                        ? 'bg-white dark:bg-neutral-700 text-green-600 dark:text-green-400 shadow-sm'
-                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
-                    }`}
-                  >
-                    <Warehouse className="w-5 h-5" />
-                    <span>Machinery</span>
-                  </button>
+                <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                  {['livestock', 'finances', 'vehicle'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab as any)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
+                        activeTab === tab
+                          ? 'bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 shadow-sm'
+                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      {tab === 'livestock' && <Beef className="w-5 h-5" />}
+                      {tab === 'finances' && <DollarSign className="w-5 h-5" />}
+                      {tab === 'vehicle' && <Warehouse className="w-5 h-5" />}
+                      <span className="capitalize">{tab}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
 
               <div className="px-6 flex-1 overflow-y-auto">
                 <AnimatePresence mode="wait">
-                  {activeTab === 'livestock' ? (
+                  {/* Livestock Form */}
+                  {activeTab === 'livestock' && (
                     <motion.form
                       key="livestock"
                       initial={{ opacity: 0, x: -20 }}
@@ -204,42 +216,26 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                     >
                       <div className="grid gap-6">
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="species"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <Beef className="w-4 h-4" />
-                            Species
+                          <Label htmlFor="species" className="text-sm font-medium flex gap-2">
+                            <Beef className="w-4 h-4" /> Species
                           </Label>
                           <Input
                             id="species"
                             value={livestockData.species}
-                            onChange={(e) =>
-                              setLivestockData({
-                                ...livestockData,
-                                species: e.target.value
-                              })
-                            }
-                            placeholder="e.g., Cow, Sheep, Goat"
-                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
+                            onChange={(e) => setLivestockData({ ...livestockData, species: e.target.value })}
+                            placeholder="e.g., Cow, Sheep"
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="sex"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <User className="w-4 h-4" />
-                            Sex
+                          <Label htmlFor="sex" className="text-sm font-medium flex gap-2">
+                            <User className="w-4 h-4" /> Sex
                           </Label>
                           <select
                             id="sex"
                             value={livestockData.sex}
-                            onChange={(e) =>
-                              setLivestockData({ ...livestockData, sex: e.target.value })
-                            }
-                            className="w-full h-12 px-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-md focus:border-green-500 dark:focus:border-green-400 focus:outline-none text-gray-900 dark:text-white"
+                            onChange={(e) => setLivestockData({ ...livestockData, sex: e.target.value })}
+                            className="w-full h-12 px-3 border rounded-md"
                           >
                             <option value="">Select sex</option>
                             <option value="Male">Male</option>
@@ -248,74 +244,46 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                         </div>
 
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="birthDate"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <Calendar className="w-4 h-4" />
-                            Birth Date
+                          <Label htmlFor="birthDate" className="text-sm font-medium flex gap-2">
+                            <Calendar className="w-4 h-4" /> Birth Date
                           </Label>
                           <Input
                             id="birthDate"
                             type="date"
                             value={livestockData.birthDate}
-                            onChange={(e) =>
-                              setLivestockData({
-                                ...livestockData,
-                                birthDate: e.target.value
-                              })
-                            }
-                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
+                            onChange={(e) => setLivestockData({ ...livestockData, birthDate: e.target.value })}
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="cattleId"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <Hash className="w-4 h-4" />
-                            Cattle ID
+                          <Label htmlFor="cattleId" className="text-sm font-medium flex gap-2">
+                            <Hash className="w-4 h-4" /> Cattle ID
                           </Label>
                           <Input
                             id="cattleId"
                             type="number"
                             value={livestockData.cattleId}
-                            onChange={(e) =>
-                              setLivestockData({
-                                ...livestockData,
-                                cattleId: e.target.value
-                              })
-                            }
+                            onChange={(e) => setLivestockData({ ...livestockData, cattleId: e.target.value })}
                             placeholder="Enter unique cattle ID"
-                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
                       </div>
 
-                      <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
+                      <div className="pt-6 border-t">
                         <div className="flex gap-3">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => {
-                              setIsOpen(false)
-                              resetForms()
-                            }}
-                            className="flex-1 h-12 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                          >
+                          <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
                             Cancel
                           </Button>
-                          <Button
-                            type="submit"
-                            className="flex-1 h-12 bg-gradient-to-r bg-emerald-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                          >
+                          <Button type="submit" className="flex-1 bg-emerald-600 text-white">
                             Add Livestock
                           </Button>
                         </div>
                       </div>
                     </motion.form>
-                  ) : (
+                  )}
+
+                  {/* Finance Form */}
+                  {activeTab === 'finances' && (
                     <motion.form
                       key="finances"
                       initial={{ opacity: 0, x: 20 }}
@@ -327,117 +295,125 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                     >
                       <div className="grid gap-6">
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="yearlyIncome"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <TrendingUp className="w-4 h-4 text-green-600" />
-                            Yearly Income
+                          <Label htmlFor="yearlyIncome" className="text-sm font-medium flex gap-2">
+                            <TrendingUp className="w-4 h-4 text-green-600" /> Yearly Income
                           </Label>
                           <Input
                             id="yearlyIncome"
                             type="number"
                             value={financeData.yearlyIncome}
-                            onChange={(e) =>
-                              setFinanceData({
-                                ...financeData,
-                                yearlyIncome: e.target.value
-                              })
-                            }
-                            placeholder="Enter total yearly income"
-                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
+                            onChange={(e) => setFinanceData({ ...financeData, yearlyIncome: e.target.value })}
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="yearlyExpenses"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <TrendingDown className="w-4 h-4 text-red-600" />
-                            Yearly Expenses
+                          <Label htmlFor="yearlyExpenses" className="text-sm font-medium flex gap-2">
+                            <TrendingDown className="w-4 h-4 text-red-600" /> Yearly Expenses
                           </Label>
                           <Input
                             id="yearlyExpenses"
                             type="number"
                             value={financeData.yearlyExpenses}
-                            onChange={(e) =>
-                              setFinanceData({
-                                ...financeData,
-                                yearlyExpenses: e.target.value
-                              })
-                            }
-                            placeholder="Enter total yearly expenses"
-                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
+                            onChange={(e) => setFinanceData({ ...financeData, yearlyExpenses: e.target.value })}
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label
-                            htmlFor="businessId"
-                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
-                          >
-                            <Hash className="w-4 h-4" />
-                            Business ID
+                          <Label htmlFor="businessId" className="text-sm font-medium flex gap-2">
+                            <Hash className="w-4 h-4" /> Business ID
                           </Label>
                           <Input
                             id="businessId"
                             type="number"
                             value={financeData.businessId}
-                            onChange={(e) =>
-                              setFinanceData({
-                                ...financeData,
-                                businessId: e.target.value
-                              })
-                            }
-                            placeholder="Enter business identifier"
-                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
+                            onChange={(e) => setFinanceData({ ...financeData, businessId: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <div className="flex gap-3">
+                          <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
+                            Cancel
+                          </Button>
+                          <Button type="submit" className="flex-1 bg-emerald-600 text-white">
+                            Add Finances
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.form>
+                  )}
+
+                  {/* Vehicle Form */}
+                  {activeTab === 'vehicle' && (
+                    <motion.form
+                      key="vehicle"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3 }}
+                      onSubmit={handleVehicleSubmit}
+                      className="space-y-6"
+                    >
+                      <div className="grid gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="vehicleType" className="text-sm font-medium flex gap-2">
+                            Vehicle Type
+                          </Label>
+                          <Input
+                            id="vehicleType"
+                            value={vehicleData.vehicleType}
+                            onChange={(e) => setVehicleData({ ...vehicleData, vehicleType: e.target.value })}
+                            placeholder="e.g., Tractor, Truck"
                           />
                         </div>
 
-                        {financeData.yearlyIncome && financeData.yearlyExpenses && (
-                          <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                                Net Profit
-                              </span>
-                              <span
-                                className={`text-lg font-bold ${
-                                  parseInt(financeData.yearlyIncome) -
-                                    parseInt(financeData.yearlyExpenses) >=
-                                  0
-                                    ? 'text-green-600 dark:text-green-400'
-                                    : 'text-red-600 dark:text-red-400'
-                                }`}
-                              >
-                                $
-                                {(
-                                  parseInt(financeData.yearlyIncome) -
-                                  parseInt(financeData.yearlyExpenses)
-                                ).toLocaleString()}
-                              </span>
-                            </div>
-                          </div>
-                        )}
+                        <div className="space-y-2">
+                          <Label htmlFor="fabricationDate" className="text-sm font-medium flex gap-2">
+                            Fabrication Year
+                          </Label>
+                          <Input
+                            id="fabricationDate"
+                            type="number"
+                            value={vehicleData.fabricationDate}
+                            onChange={(e) => setVehicleData({ ...vehicleData, fabricationDate: e.target.value })}
+                            placeholder="e.g., 2020"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="brand" className="text-sm font-medium flex gap-2">
+                            Brand
+                          </Label>
+                          <Input
+                            id="brand"
+                            value={vehicleData.brand}
+                            onChange={(e) => setVehicleData({ ...vehicleData, brand: e.target.value })}
+                            placeholder="e.g., John Deere"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="vehicleGroupId" className="text-sm font-medium flex gap-2">
+                            Vehicle Group ID
+                          </Label>
+                          <Input
+                            id="vehicleGroupId"
+                            type="number"
+                            value={vehicleData.vehicleGroupId}
+                            onChange={(e) => setVehicleData({ ...vehicleData, vehicleGroupId: e.target.value })}
+                            placeholder="Group ID reference"
+                          />
+                        </div>
                       </div>
-                      <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
+
+                      <div className="pt-6 border-t">
                         <div className="flex gap-3">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => {
-                              setIsOpen(false)
-                              resetForms()
-                            }}
-                            className="flex-1 h-12 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                          >
+                          <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
                             Cancel
                           </Button>
-                          <Button
-                            type="submit"
-                            className="flex-1 h-12 bg-gradient-to-r bg-emerald-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                          >
-                            Add Finances
+                          <Button type="submit" className="flex-1 bg-emerald-600 text-white">
+                            Add Vehicle
                           </Button>
                         </div>
                       </div>
