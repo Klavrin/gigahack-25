@@ -8,7 +8,7 @@ import Subsidy from './pages/Subsidy'
 import Map from './pages/Map'
 import Profile from './pages/Profile'
 import Livestock from './pages/Livestock'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -17,6 +17,18 @@ const supabase = createClient(
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    const test = async () => {
+      const { data, error } = await supabase.from('animal').select('*')
+      if (error) {
+        console.error('Error fetching animals:', error.message)
+      } else {
+        console.log(data)
+      }
+    }
+    test()
+  }, [])
 
   return (
     <BrowserRouter>
@@ -33,7 +45,9 @@ const App = () => {
         />
         <Route
           path="/livestock"
-          element={<Livestock isOpen={isOpen} setIsOpen={setIsOpen} />}
+          element={
+            <Livestock isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase} />
+          }
         />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

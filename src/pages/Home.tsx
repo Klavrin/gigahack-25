@@ -1,27 +1,5 @@
-import AddPopup from '@/components/AddPopup'
 import Layout from '@/components/Layout'
-import {
-  Cloud,
-  Thermometer,
-  Droplets,
-  Wind,
-  Sun,
-  Moon,
-  TrendingUp,
-  Leaf,
-  Sprout,
-  Calendar,
-  Bell,
-  MapPin,
-  Plus,
-  ChevronRight,
-  BarChart3,
-  Activity,
-  Users,
-  File,
-  Panda
-} from 'lucide-react'
-import { useState } from 'react'
+import { MapPin, Plus, Activity, Users, File, Panda } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface HomeProps {
@@ -34,7 +12,7 @@ const Home = ({ isOpen, setIsOpen }: HomeProps) => {
     {
       title: 'Add New',
       icon: Plus,
-      color: 'bg-green-500',
+      color: 'bg-emerald-600',
       link: '/add',
       func: () => {
         setIsOpen(true)
