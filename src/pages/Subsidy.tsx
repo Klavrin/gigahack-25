@@ -35,7 +35,12 @@ const shakeAnimation = {
   transition: { duration: 1 }
 }
 
-const Subsidy = () => {
+interface SubsidyProps {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}
+
+const Subsidy = ({ isOpen, setIsOpen }: SubsidyProps) => {
   const controls = useAnimation()
 
   useEffect(() => {
@@ -47,7 +52,7 @@ const Subsidy = () => {
   }, [controls])
 
   return (
-    <Layout>
+    <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="max-w-[60rem] mx-auto">
         <div className="text-4xl pt-6 font-bold">Recommended Subsidies</div>
 

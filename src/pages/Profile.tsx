@@ -13,7 +13,12 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 import { LoaderCircle } from 'lucide-react'
 
-const Profile = () => {
+interface ProfileProps {
+  isOpen: boolean
+  setIsOpen: (open: boolean) => void
+}
+
+const Profile = ({ isOpen, setIsOpen }: ProfileProps) => {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
@@ -41,7 +46,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="flex items-center justify-center h-screen">
           <LoaderCircle className="animate-spin" />
         </div>
@@ -50,7 +55,7 @@ const Profile = () => {
   }
 
   return (
-    <Layout>
+    <Layout isOpen={isOpen} setIsOpen={setIsOpen}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

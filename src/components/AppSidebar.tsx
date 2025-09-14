@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, Settings, History, Map, Plus, User, FilePen } from 'lucide-react'
+import { Home, Settings, History, Map, Plus, User, FilePen, Panda } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -51,8 +51,13 @@ const footerItems = [
   }
 ]
 
-export function AppSidebar() {
-  const [isOpen, setIsOpen] = useState(false)
+export function AppSidebar({
+  isOpen,
+  setIsOpen
+}: {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}) {
   const location = useLocation()
 
   return (
