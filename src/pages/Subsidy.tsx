@@ -45,8 +45,51 @@ interface SubsidyProps {
 const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
   const [typeSubsidies, setTypeSubsidies] = useState<any>(null)
   const [subsColors, setSubsColors] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const controls = useAnimation()
+
+  const [matches, setMatches] = useState([
+    {
+      band: 'verde',
+      reasoning_ro:
+        'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
+      score: 100,
+      subsidyCode: 'SP_2.3',
+      subsidyTitle: 'Investiții în bazine de acumulare a apei pentru irigare'
+    },
+    {
+      band: 'galben',
+      reasoning_ro:
+        'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
+      score: 60,
+      subsidyCode: 'SP_2.4',
+      subsidyTitle: 'Investiții în exploatații din sectorul vegetal'
+    },
+    {
+      band: 'galben',
+      reasoning_ro:
+        'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
+      score: 60,
+      subsidyCode: 'SP_2.8',
+      subsidyTitle: 'Investiții în infrastructura din sectorul vegetal'
+    },
+    {
+      band: 'roșu',
+      reasoning_ro:
+        'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
+      score: 40,
+      subsidyCode: 'SP_2.10',
+      subsidyTitle: 'Investiții în tehnologii de lucrare a solului'
+    },
+    {
+      band: 'roșu',
+      reasoning_ro:
+        'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
+      score: 40,
+      subsidyCode: 'SP_2.2',
+      subsidyTitle: 'Investiții în sisteme și echipamente pentru irigare'
+    }
+  ])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -58,22 +101,52 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
 
   useEffect(() => {
     const fetchAutocompletions = async () => {
-      // const res = await axios.get(
-      //   import.meta.env.VITE_BACKEND_PYTHON_URL + '/api/match/ai'
-      // )
-
-      const ranking = await axios.post(
-        import.meta.env.VITE_BACKEND_PYTHON_URL + '/api/match/ai',
-        {
-          businessId: 101
-        }
+      const res = await axios.get(
+        import.meta.env.VITE_BACKEND_PYTHON_URL + '/api/scraper/autocomplete'
       )
-      setTypeSubsidies(ranking.data.matches)
+      console.log(res)
+      setTypeSubsidies(res.data)
+      // const ranking = await axios.post(
+      //   import.meta.env.VITE_BACKEND_PYTHON_URL + '/api/match/ai',
+      //   {
+      //     businessId: 101
+      //   }
+      // )
       // setSubsColors(ranking.data)
       setLoading(false)
     }
     fetchAutocompletions()
   }, [])
+
+  const handleDownload = async () => {
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_BACKEND_PYTHON_URL + '/api/scraper/complete-docx',
+        {
+          businessId: 101,
+          url: 'https://aipa.gov.md/sites/default/files/ghid-subventii-complementare/Act%20de%20pompare%20a%20apei%20pe%20sistemele%20centralizate%20de%20irigare_0.docx'
+        },
+        { responseType: 'blob' }
+      )
+
+      // Create a blob URL
+      const blob = new Blob([res.data], {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      })
+      const url = window.URL.createObjectURL(blob)
+
+      // Create a temporary link to trigger download
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'subsidy.docx') // file name
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Download failed', error)
+    }
+  }
 
   if (loading) {
     return (
@@ -90,14 +163,13 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
     <Layout isOpen={isOpen} setIsOpen={setIsOpen} supabase={supabase}>
       <div className="max-w-[60rem] mx-auto">
         <div className="text-4xl pt-6 font-bold">Recommended Subsidies</div>
-
         <motion.div
           className="mt-4"
           variants={containerVariants}
           initial="hidden"
           animate="show"
         >
-          {typeSubsidies.map((item: any) => {
+          {matches.map((item: any) => {
             if (item.suggested_source === 'none') return
 
             return (
@@ -110,6 +182,7 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
                   if (item.band === 'roșu') return 'border-red-500/50 bg-red-500/10'
                 }}`}
                 variants={cardVariants}
+                onClick={handleDownload}
               >
                 <div className="flex gap-2 items-center">
                   {item.starred && (
