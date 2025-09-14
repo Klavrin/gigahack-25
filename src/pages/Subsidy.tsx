@@ -4,6 +4,8 @@ import { motion, useAnimation } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip'
 
 // const typeSubsidies = [
 //   { name: 'Land Subsidy', starred: true },
@@ -55,7 +57,9 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
         'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
       score: 100,
       subsidyCode: 'SP_2.3',
-      subsidyTitle: 'Investiții în bazine de acumulare a apei pentru irigare'
+      subsidyTitle: 'Investiții în bazine de acumulare a apei pentru irigare',
+      color: 'bg-green-500/10 border-green-500/50',
+      starred: true
     },
     {
       band: 'galben',
@@ -63,7 +67,8 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
         'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
       score: 60,
       subsidyCode: 'SP_2.4',
-      subsidyTitle: 'Investiții în exploatații din sectorul vegetal'
+      subsidyTitle: 'Investiții în exploatații din sectorul vegetal',
+      color: 'bg-yellow-500/10 border-yellow-500/50'
     },
     {
       band: 'galben',
@@ -71,15 +76,20 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
         'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
       score: 60,
       subsidyCode: 'SP_2.8',
-      subsidyTitle: 'Investiții în infrastructura din sectorul vegetal'
-    },
+      subsidyTitle: 'Investiții în infrastructura din sectorul vegetal',
+      color: 'bg-yellow-500/10 border-yellow-500/50'
+    }
+  ])
+
+  const otherSubsidies = [
     {
       band: 'roșu',
       reasoning_ro:
         'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
       score: 40,
       subsidyCode: 'SP_2.10',
-      subsidyTitle: 'Investiții în tehnologii de lucrare a solului'
+      subsidyTitle: 'Investiții în tehnologii de lucrare a solului',
+      color: 'bg-red-500/10 border-red-500/50'
     },
     {
       band: 'roșu',
@@ -87,9 +97,10 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
         'Scor estimat pe bază de potrivire textuală între descrierea subvenției și profilul fermei. Semnale detectate: animal, bazine, bovine, carne, cerealiere, culturi, cultură, infrastructură, irigare, lapte, legume, ovine, porcine, sector vegetal, tehnologii, zootehnic, zootehnie. Suprafață: 31.5 ha; efective: 120 capete.',
       score: 40,
       subsidyCode: 'SP_2.2',
-      subsidyTitle: 'Investiții în sisteme și echipamente pentru irigare'
+      subsidyTitle: 'Investiții în sisteme și echipamente pentru irigare',
+      color: 'bg-red-500/10 border-red-500/50'
     }
-  ])
+  ]
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -106,13 +117,6 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
       )
       console.log(res)
       setTypeSubsidies(res.data)
-      // const ranking = await axios.post(
-      //   import.meta.env.VITE_BACKEND_PYTHON_URL + '/api/match/ai',
-      //   {
-      //     businessId: 101
-      //   }
-      // )
-      // setSubsColors(ranking.data)
       setLoading(false)
     }
     fetchAutocompletions()
@@ -129,16 +133,14 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
         { responseType: 'blob' }
       )
 
-      // Create a blob URL
       const blob = new Blob([res.data], {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       })
       const url = window.URL.createObjectURL(blob)
 
-      // Create a temporary link to trigger download
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', 'subsidy.docx') // file name
+      link.setAttribute('download', 'subsidy-template.docx') // file name
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -175,7 +177,9 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
             return (
               <motion.div
                 key={item.filename}
-                className={`p-4 mt-4 border rounded-lg hover:shadow-lg transition-shadow cursor-pointer ${() => {
+                className={`p-4 mt-4 border rounded-lg hover:shadow-lg transition-shadow cursor-pointer ${
+                  item.color
+                } ${() => {
                   if (item.band === 'verde') return 'border-green-500/50 bg-green-500/10'
                   if (item.band === 'galben')
                     return 'border-yellow-500/50 bg-yellow-500/10'
@@ -187,13 +191,96 @@ const Subsidy = ({ isOpen, setIsOpen, supabase }: SubsidyProps) => {
                 <div className="flex gap-2 items-center">
                   {item.starred && (
                     <motion.div animate={controls} className="inline-block">
-                      <Star color="#fcba03" fill="#fcba03" />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <motion.div
+                            whileHover={{ scale: 1.2, rotate: -10 }}
+                            whileTap={{ scale: 0.9, rotate: 10 }}
+                            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                            className="cursor-pointer"
+                          >
+                            <Star
+                              color="#fcba03"
+                              fill="#fcba03"
+                              className="drop-shadow-md hover:drop-shadow-lg"
+                            />
+                          </motion.div>
+                        </TooltipTrigger>
+
+                        <TooltipContent
+                          side="top"
+                          className="rounded-2xl bg-gradient-to-r from-yellow-100 to-yellow-50 border border-yellow-300 px-4 py-2 shadow-lg"
+                        >
+                          <motion.p
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="text-sm font-medium text-yellow-800"
+                          >
+                            🌟 This subsidy is{' '}
+                            <span className="font-semibold">especially recommended!</span>
+                          </motion.p>
+                        </TooltipContent>
+                      </Tooltip>
                     </motion.div>
                   )}
                   <div className="text-2xl font-semibold">{item.subsidyTitle}</div>
                 </div>
                 <div className="mt-2 text-md md:text-sm text-muted-foreground">
                   {item.reasoning_ro}
+                </div>
+
+                <div className="mt-2 flex justify-end" onClick={handleDownload}>
+                  <Button className="bg-emerald-600 hover:bg-emerald-800">
+                    Download Document
+                  </Button>
+                </div>
+              </motion.div>
+            )
+          })}
+
+          <div className="text-4xl pt-6 font-bold">Other Subsidies</div>
+
+          {otherSubsidies.map((item: any) => {
+            if (item.suggested_source === 'none') return
+
+            return (
+              <motion.div
+                key={item.filename}
+                className={`p-4 mt-4 border rounded-lg hover:shadow-lg transition-shadow cursor-pointer ${
+                  item.color
+                } ${() => {
+                  if (item.band === 'verde') return 'border-green-500/50 bg-green-500/10'
+                  if (item.band === 'galben')
+                    return 'border-yellow-500/50 bg-yellow-500/10'
+                  if (item.band === 'roșu') return 'border-red-500/50 bg-red-500/10'
+                }}`}
+                variants={cardVariants}
+                onClick={handleDownload}
+              >
+                <div className="flex gap-2 items-center">
+                  {item.starred && (
+                    <motion.div animate={controls} className="inline-block">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Star color="#fcba03" fill="#fcba03" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>This subsidy is especially recommended!</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </motion.div>
+                  )}
+                  <div className="text-2xl font-semibold">{item.subsidyTitle}</div>
+                </div>
+                <div className="mt-2 text-md md:text-sm text-muted-foreground">
+                  {item.reasoning_ro}
+                </div>
+
+                <div className="mt-2 flex justify-end" onClick={handleDownload}>
+                  <Button className="bg-emerald-600 hover:bg-emerald-800">
+                    Download Document
+                  </Button>
                 </div>
               </motion.div>
             )

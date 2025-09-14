@@ -1,57 +1,58 @@
-import React, { useEffect, useRef, useState } from "react";
-import L, { FeatureGroup, Polygon, Polyline, type LatLngTuple } from "leaflet";
-import "leaflet-draw";
-import "leaflet/dist/leaflet.css";
-import "leaflet-draw/dist/leaflet.draw.css";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from 'react'
+import L, { FeatureGroup, Polygon, Polyline, type LatLngTuple } from 'leaflet'
+import 'leaflet-draw'
+import 'leaflet/dist/leaflet.css'
+import 'leaflet-draw/dist/leaflet.draw.css'
+import axios from 'axios'
+import { Input } from './ui/input'
 
 export interface Field {
-  id?: number;
-  businessId: number;
-  cropType: string;
-  coords: LatLngTuple[][];
-  size: number;
-  soilType?: string;
-  fertiliser?: string;
-  herbicide?: string;
+  id?: number
+  businessId: number
+  cropType: string
+  coords: LatLngTuple[][]
+  size: number
+  soilType?: string
+  fertiliser?: string
+  herbicide?: string
 }
 
 interface MapFieldsProps {
-  businessId: number;
-  token: string;
+  businessId: number
+  token: string
 }
 
 const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
-  const mapRef = useRef<L.Map | null>(null);
-  const drawnItemsRef = useRef<FeatureGroup>(new L.FeatureGroup());
-  const [fields, setFields] = useState<Field[]>([]);
+  const mapRef = useRef<L.Map | null>(null)
+  const drawnItemsRef = useRef<FeatureGroup>(new L.FeatureGroup())
+  const [fields, setFields] = useState<Field[]>([])
 
   const [fieldData, setFieldData] = useState({
-    cropType: "",
+    cropType: '',
     size: 0,
-    soilType: "",
-    fertiliser: "",
-    herbicide: "",
-  });
+    soilType: '',
+    fertiliser: '',
+    herbicide: ''
+  })
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFieldData((prev) => ({ ...prev, [name]: value }));
-  };
+    const { name, value } = e.target
+    setFieldData((prev) => ({ ...prev, [name]: value }))
+  }
 
   useEffect(() => {
-    if (mapRef.current) return;
+    if (mapRef.current) return
 
-    const map = L.map("map").setView([47.0, 28.8], 7);
-    mapRef.current = map;
+    const map = L.map('map').setView([47.0, 28.8], 7)
+    mapRef.current = map
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map)
 
-    drawnItemsRef.current.addTo(map);
+    drawnItemsRef.current.addTo(map)
 
     const drawControl = new L.Control.Draw({
       edit: { featureGroup: drawnItemsRef.current },
@@ -60,10 +61,10 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         rectangle: false,
         circle: false,
         polyline: { metric: true },
-        marker: false,
-      },
-    });
-    map.addControl(drawControl);
+        marker: false
+      }
+    })
+    map.addControl(drawControl)
 
     // Load existing fields
     const fetchFields = async () => {
@@ -71,52 +72,50 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         const res = await axios.get<Field[]>(
           `${import.meta.env.VITE_BACKEND_URL}/fields/business/${businessId}`,
           { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setFields(res.data);
+        )
+        setFields(res.data)
 
         res.data.forEach((f) => {
           f.coords.forEach((polyCoords) => {
-            const polygon = L.polygon(polyCoords, { color: "green" }).addTo(
+            const polygon = L.polygon(polyCoords, { color: 'green' }).addTo(
               drawnItemsRef.current
-            );
-            (polygon as any).fieldId = f.id;
+            )
+            ;(polygon as any).fieldId = f.id
             polygon.bindPopup(
-              `Crop: ${f.cropType}, Size: ${f.size} ha, Soil: ${
-                f.soilType || "-"
-              }`
-            );
-          });
-        });
+              `Crop: ${f.cropType}, Size: ${f.size} ha, Soil: ${f.soilType || '-'}`
+            )
+          })
+        })
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
-    };
-    fetchFields();
+    }
+    fetchFields()
 
     // Create polygon or polyline
     map.on(L.Draw.Event.CREATED, async (event: any) => {
-      const layer = event.layer as Polygon | Polyline | L.Rectangle;
+      const layer = event.layer as Polygon | Polyline | L.Rectangle
 
-  drawnItemsRef.current.addLayer(layer);
+      drawnItemsRef.current.addLayer(layer)
 
-  let coords: LatLngTuple[][] = [];
+      let coords: LatLngTuple[][] = []
 
-  // Treat Polygon and Rectangle the same way
-  if (layer instanceof L.Polygon) {
-    const latlngs = layer.getLatLngs() as L.LatLng[][] | L.LatLng[][][];
-    if (Array.isArray(latlngs[0][0])) {
-      coords = (latlngs as L.LatLng[][][]).map((poly) =>
-        poly[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
-      );
-    } else {
-      coords = [
-        (latlngs as L.LatLng[][])[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple),
-      ];
-    }
-  } else if (layer instanceof L.Polyline) {
-    const latlngs = layer.getLatLngs() as L.LatLng[];
-    coords = [latlngs.map((ll) => [ll.lat, ll.lng] as LatLngTuple)];
-  }
+      // Treat Polygon and Rectangle the same way
+      if (layer instanceof L.Polygon) {
+        const latlngs = layer.getLatLngs() as L.LatLng[][] | L.LatLng[][][]
+        if (Array.isArray(latlngs[0][0])) {
+          coords = (latlngs as L.LatLng[][][]).map((poly) =>
+            poly[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
+          )
+        } else {
+          coords = [
+            (latlngs as L.LatLng[][])[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
+          ]
+        }
+      } else if (layer instanceof L.Polyline) {
+        const latlngs = layer.getLatLngs() as L.LatLng[]
+        coords = [latlngs.map((ll) => [ll.lat, ll.lng] as LatLngTuple)]
+      }
 
       const payload: Field = {
         businessId,
@@ -125,51 +124,49 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         soilType: fieldData.soilType,
         fertiliser: fieldData.fertiliser,
         herbicide: fieldData.herbicide,
-        coords,
-      };
+        coords
+      }
 
       try {
         const res = await axios.post<Field>(
           `${import.meta.env.VITE_BACKEND_URL}/fields/${businessId}`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
-        );
-        (layer as any).fieldId = res.data.id;
+        )
+        ;(layer as any).fieldId = res.data.id
         layer.bindPopup(
           `Crop: ${res.data.cropType}, Size: ${res.data.size} ha, Soil: ${
-            res.data.soilType || "-"
+            res.data.soilType || '-'
           }`
-        );
-        setFields((prev) => [...prev, res.data]);
+        )
+        setFields((prev) => [...prev, res.data])
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
 
       setFieldData({
-        cropType: "",
+        cropType: '',
         size: 0,
-        soilType: "",
-        fertiliser: "",
-        herbicide: "",
-      });
-    });
+        soilType: '',
+        fertiliser: '',
+        herbicide: ''
+      })
+    })
 
     // Edit polygon
     map.on(L.Draw.Event.EDITED, async (event: any) => {
       event.layers.eachLayer(async (layer: any) => {
-        const latlngs = layer.getLatLngs() as L.LatLng[][] | L.LatLng[][][];
-        let coords: LatLngTuple[][] = [];
+        const latlngs = layer.getLatLngs() as L.LatLng[][] | L.LatLng[][][]
+        let coords: LatLngTuple[][] = []
 
         if (Array.isArray(latlngs[0][0])) {
           coords = (latlngs as L.LatLng[][][]).map((poly) =>
             poly[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
-          );
+          )
         } else {
           coords = [
-            (latlngs as L.LatLng[][])[0].map(
-              (ll) => [ll.lat, ll.lng] as LatLngTuple
-            ),
-          ];
+            (latlngs as L.LatLng[][])[0].map((ll) => [ll.lat, ll.lng] as LatLngTuple)
+          ]
         }
 
         try {
@@ -177,16 +174,16 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
             `${import.meta.env.VITE_BACKEND_URL}/fields/${layer.fieldId}`,
             { coords },
             { headers: { Authorization: `Bearer ${token}` } }
-          );
+          )
 
           setFields((prev) =>
             prev.map((f) => (f.id === layer.fieldId ? { ...f, coords } : f))
-          );
+          )
         } catch (err) {
-          console.error(err);
+          console.error(err)
         }
-      });
-    });
+      })
+    })
 
     // Delete polygon
     map.on(L.Draw.Event.DELETED, async (event: any) => {
@@ -195,59 +192,58 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
           await axios.delete(
             `${import.meta.env.VITE_BACKEND_URL}/fields/${layer.fieldId}`,
             { headers: { Authorization: `Bearer ${token}` } }
-          );
+          )
 
-          setFields((prev) => prev.filter((f) => f.id !== layer.fieldId));
+          setFields((prev) => prev.filter((f) => f.id !== layer.fieldId))
         } catch (err) {
-          console.error(err);
+          console.error(err)
         }
-      });
-    });
+      })
+    })
 
     return () => {
-      map.remove();
-      mapRef.current = null;
-    };
-  }, [businessId, token, fieldData]);
+      map.remove()
+      mapRef.current = null
+    }
+  }, [businessId, token, fieldData])
 
   // Zoom to field on click
   const handleFieldClick = (field: Field) => {
-    if (!mapRef.current) return;
+    if (!mapRef.current) return
     const layer = drawnItemsRef.current
       .getLayers()
-      .find((l: any) => l.fieldId === field.id) as Polygon;
+      .find((l: any) => l.fieldId === field.id) as Polygon
     if (layer) {
-      mapRef.current.fitBounds(layer.getBounds());
-      layer.openPopup();
+      mapRef.current.fitBounds(layer.getBounds())
+      layer.openPopup()
     }
-  };
+  }
 
   // Delete field from list and map
   const handleDeleteField = async (field: Field) => {
-    if (!field.id) return;
+    if (!field.id) return
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/fields/${field.id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/fields/${field.id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
 
-      setFields((prev) => prev.filter((f) => f.id !== field.id));
+      setFields((prev) => prev.filter((f) => f.id !== field.id))
 
       const layer = drawnItemsRef.current
         .getLayers()
-        .find((l: any) => l.fieldId === field.id);
-      if (layer) drawnItemsRef.current.removeLayer(layer);
+        .find((l: any) => l.fieldId === field.id)
+      if (layer) drawnItemsRef.current.removeLayer(layer)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
 
   return (
     <div>
       <div className="field-form mb-4 flex flex-col gap-2">
         <label>
           Crop Type:
-          <input
+          <Input
             name="cropType"
             value={fieldData.cropType}
             onChange={handleInputChange}
@@ -255,7 +251,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </label>
         <label>
           Size (ha):
-          <input
+          <Input
             type="number"
             name="size"
             value={fieldData.size}
@@ -264,7 +260,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </label>
         <label>
           Soil Type:
-          <input
+          <Input
             name="soilType"
             value={fieldData.soilType}
             onChange={handleInputChange}
@@ -272,7 +268,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </label>
         <label>
           Fertiliser:
-          <input
+          <Input
             name="fertiliser"
             value={fieldData.fertiliser}
             onChange={handleInputChange}
@@ -280,7 +276,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </label>
         <label>
           Herbicide:
-          <input
+          <Input
             name="herbicide"
             value={fieldData.herbicide}
             onChange={handleInputChange}
@@ -288,7 +284,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </label>
       </div>
 
-      <div id="map" style={{ height: "500px" }} />
+      <div id="map" style={{ height: '500px' }} />
 
       <div className="mt-4">
         <h2 className="text-lg font-bold mb-2">Fields List</h2>
@@ -300,15 +296,15 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
               onClick={() => handleFieldClick(f)}
             >
               <div>
-                <strong>{f.cropType}</strong> | Size: {f.size} ha | Soil:{" "}
-                {f.soilType || "-"} | Fertiliser: {f.fertiliser || "-"} | Herbicide:{" "}
-                {f.herbicide || "-"}
+                <strong>{f.cropType}</strong> | Size: {f.size} ha | Soil:{' '}
+                {f.soilType || '-'} | Fertiliser: {f.fertiliser || '-'} | Herbicide:{' '}
+                {f.herbicide || '-'}
               </div>
               <button
                 className="ml-2 text-red-600 hover:text-red-800"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteField(f);
+                  e.stopPropagation()
+                  handleDeleteField(f)
                 }}
               >
                 Delete
@@ -318,7 +314,7 @@ const MapFields: React.FC<MapFieldsProps> = ({ businessId, token }) => {
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MapFields;
+export default MapFields

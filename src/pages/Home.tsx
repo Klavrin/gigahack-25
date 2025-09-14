@@ -1,5 +1,5 @@
 import Layout from '@/components/Layout'
-import { MapPin, Plus, Activity, Users, File, Panda, DollarSign } from 'lucide-react'
+import { MapPin, Plus, Activity, File, Panda, DollarSign } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface HomeProps {
@@ -43,18 +43,11 @@ const Home = ({ isOpen, setIsOpen, supabase }: HomeProps) => {
   ]
 
   const recentActivities = [
-    { action: 'Watered Tomato Field A', time: '2 hours ago', icon: File },
     {
-      action: 'Harvested Wheat Section 3',
-      time: '1 day ago',
+      action: 'Investiții în tehnologii de lucrare a solului',
+      time: '5 hours ago',
       icon: File
-    },
-    {
-      action: 'Applied fertilizer to Corn Field',
-      time: '2 days ago',
-      icon: File
-    },
-    { action: 'Soil analysis completed', time: '3 days ago', icon: File }
+    }
   ]
 
   return (
@@ -115,6 +108,22 @@ const Home = ({ isOpen, setIsOpen, supabase }: HomeProps) => {
                     </div>
                   </div>
                 ))}
+
+                {localStorage.getItem('recentActivity') && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-50 dark:hover:bg-neutral-700/50 transition-colors duration-200">
+                    <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-900/30 rounded-full flex items-center justify-center">
+                      <File className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-neutral-800 dark:text-white">
+                        Investiții în bazine de acumulare a apei pentru irigare
+                      </p>
+                      <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                        Just Now
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
               <Link
                 to="/tasks"

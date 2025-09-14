@@ -130,20 +130,20 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
             onClick={(e) => e.stopPropagation()}
             className="w-[95vw] max-w-2xl h-[90vh] max-h-[700px]"
           >
-            <Card className="w-full h-full bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 border border-green-200 dark:border-gray-700 shadow-2xl overflow-hidden p-0 pb-6">
+            <Card className="w-full h-full bg-gradient-to-b bg-neutral-100 dark:bg-neutral-900 border border-green-200 dark:border-neutral-700 shadow-2xl overflow-hidden p-0 pb-6">
               {/* Header */}
-              <div className="relative p-6 pb-4 border-b border-green-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800">
+              <div className="relative p-6 pb-4 border-b border-green-200 dark:border-neutral-700 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-neutral-800 dark:to-neutral-800">
                 <button
                   onClick={() => {
                     setIsOpen(false)
                     resetForms()
                   }}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 hover:scale-110"
                 >
-                  <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  <X className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
                 </button>
 
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-neutral-800 dark:text-white mb-2">
                   Add New Record
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -153,13 +153,13 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
 
               {/* Tab Navigation */}
               <div className="px-6 pb-4">
-                <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                <div className="flex bg-gray-100 dark:bg-neutral-800 rounded-lg p-1">
                   <button
                     onClick={() => setActiveTab('livestock')}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
                       activeTab === 'livestock'
-                        ? 'bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                        ? 'bg-white dark:bg-neutral-700 text-green-600 dark:text-green-400 shadow-sm'
+                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                     }`}
                   >
                     <Beef className="w-5 h-5" />
@@ -169,8 +169,8 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                     onClick={() => setActiveTab('finances')}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
                       activeTab === 'finances'
-                        ? 'bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                        ? 'bg-white dark:bg-neutral-700 text-green-600 dark:text-green-400 shadow-sm'
+                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                     }`}
                   >
                     <DollarSign className="w-5 h-5" />
@@ -180,8 +180,8 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                     onClick={() => setActiveTab('equipment')}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-medium transition-all duration-200 ${
                       activeTab === 'equipment'
-                        ? 'bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                        ? 'bg-white dark:bg-neutral-700 text-green-600 dark:text-green-400 shadow-sm'
+                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
                     }`}
                   >
                     <Warehouse className="w-5 h-5" />
@@ -206,7 +206,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                         <div className="space-y-2">
                           <Label
                             htmlFor="species"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <Beef className="w-4 h-4" />
                             Species
@@ -221,14 +221,14 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               })
                             }
                             placeholder="e.g., Cow, Sheep, Goat"
-                            className="h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400"
+                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
 
                         <div className="space-y-2">
                           <Label
                             htmlFor="sex"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <User className="w-4 h-4" />
                             Sex
@@ -239,7 +239,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                             onChange={(e) =>
                               setLivestockData({ ...livestockData, sex: e.target.value })
                             }
-                            className="w-full h-12 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:border-green-500 dark:focus:border-green-400 focus:outline-none text-gray-900 dark:text-white"
+                            className="w-full h-12 px-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-md focus:border-green-500 dark:focus:border-green-400 focus:outline-none text-gray-900 dark:text-white"
                           >
                             <option value="">Select sex</option>
                             <option value="Male">Male</option>
@@ -250,7 +250,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                         <div className="space-y-2">
                           <Label
                             htmlFor="birthDate"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <Calendar className="w-4 h-4" />
                             Birth Date
@@ -265,14 +265,14 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                                 birthDate: e.target.value
                               })
                             }
-                            className="h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400"
+                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
 
                         <div className="space-y-2">
                           <Label
                             htmlFor="cattleId"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <Hash className="w-4 h-4" />
                             Cattle ID
@@ -288,12 +288,12 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               })
                             }
                             placeholder="Enter unique cattle ID"
-                            className="h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400"
+                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
                       </div>
 
-                      <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                      <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
                         <div className="flex gap-3">
                           <Button
                             type="button"
@@ -302,7 +302,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               setIsOpen(false)
                               resetForms()
                             }}
-                            className="flex-1 h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                            className="flex-1 h-12 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                           >
                             Cancel
                           </Button>
@@ -329,7 +329,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                         <div className="space-y-2">
                           <Label
                             htmlFor="yearlyIncome"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <TrendingUp className="w-4 h-4 text-green-600" />
                             Yearly Income
@@ -345,14 +345,14 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               })
                             }
                             placeholder="Enter total yearly income"
-                            className="h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400"
+                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
 
                         <div className="space-y-2">
                           <Label
                             htmlFor="yearlyExpenses"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <TrendingDown className="w-4 h-4 text-red-600" />
                             Yearly Expenses
@@ -368,14 +368,14 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               })
                             }
                             placeholder="Enter total yearly expenses"
-                            className="h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400"
+                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
 
                         <div className="space-y-2">
                           <Label
                             htmlFor="businessId"
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                            className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2"
                           >
                             <Hash className="w-4 h-4" />
                             Business ID
@@ -391,14 +391,14 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               })
                             }
                             placeholder="Enter business identifier"
-                            className="h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400"
+                            className="h-12 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:border-green-500 dark:focus:border-green-400"
                           />
                         </div>
 
                         {financeData.yearlyIncome && financeData.yearlyExpenses && (
                           <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border border-green-200 dark:border-green-800">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                                 Net Profit
                               </span>
                               <span
@@ -420,7 +420,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                           </div>
                         )}
                       </div>
-                      <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                      <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
                         <div className="flex gap-3">
                           <Button
                             type="button"
@@ -429,7 +429,7 @@ const AddPopup = ({ isOpen, setIsOpen, supabase }: AddPopupProps) => {
                               setIsOpen(false)
                               resetForms()
                             }}
-                            className="flex-1 h-12 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                            className="flex-1 h-12 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                           >
                             Cancel
                           </Button>

@@ -29,7 +29,7 @@ const contentItems = [
   }
 ]
 
-const MobileNav = () => {
+const MobileNav = ({ isOpen, setIsOpen }: any) => {
   const location = useLocation()
 
   return (
@@ -51,6 +51,7 @@ const MobileNav = () => {
                     ? 'w-14 h-14 rounded-full bg-emerald-600 shadow-lg hover:shadow-xl active:scale-95 hover:from-green-600 hover:to-emerald-700'
                     : 'w-12 h-12 rounded-xl hover:scale-110 active:scale-95'
                 }`}
+                onClick={() => isAddButton && setIsOpen(true)}
               >
                 {isActive && !isAddButton && (
                   <div className="absolute -top-1 w-1 h-1 bg-green-600 rounded-full"></div>
